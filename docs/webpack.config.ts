@@ -57,13 +57,10 @@ const config = {
             options: {
               postcssOptions: {
                 plugins: [
-                  [
-                    'postcss-preset-env',
-                    {
-                      // Options
-                    },
-                  ],
-                  plugin,
+                  ['postcss-preset-env'],
+                  ...plugin({
+                    // ...options
+                  }),
                 ],
               },
             },

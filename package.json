@@ -24,17 +24,17 @@
     "node": "^14.13.1 || >=16.0.0"
   },
   "scripts": {
+    "analyze": "npm run clean && webpack --config webpack.config.ts --mode production --analyze --progress",
     "build-storybook": "build-storybook",
+    "devsrv": "node --experimental-specifier-resolution=node --loader ts-node/esm node_modules/.bin/webpack serve --config docs/webpack.config.ts --mode development",
     "lint": "npm-run-all lint:*",
     "lint:eslint": "eslint \"components/**\" --ext=.tsx,.ts && eslint \"plugin/**\" --ext=.js",
     "lint:spell": "cspell -c .vscode/cspell.json --no-summary \"**/*.{js,ts,tsx,md,yml,json}\"",
+    "plugin": "tsc ./src/plugin/index.ts",
     "prepare": "npm-run-all prepare:*",
     "prepare:docs": "node --experimental-specifier-resolution=node node_modules/.bin/docs-shared-config",
     "prepare:husky": "husky install",
-    "prepare:vscode": "node --experimental-specifier-resolution=node node_modules/.bin/vscode-shared-config",
-    "plugin": "tsc ./src/plugin/index.ts",
-    "devsrv": "node --experimental-specifier-resolution=node --loader ts-node/esm node_modules/.bin/webpack serve --config docs/webpack.config.ts --mode development",
-    "analyze": "npm run clean && webpack --config webpack.config.ts --mode production --analyze --progress"
+    "prepare:vscode": "node --experimental-specifier-resolution=node node_modules/.bin/vscode-shared-config"
   },
   "devDependencies": {
     "@sophty-ui/icons": "^0.3.1",
@@ -77,5 +77,9 @@
     "clsx": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.2",
+    "postcss-nested": "^5.0.6"
   }
 }

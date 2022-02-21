@@ -1,10 +1,19 @@
 .btn {
-  color: red;
+  // TODO: declare variable and add property declaration by name:
+  // --s-btn-color: var(--s-btn-color, blue);
+  // color: var(--s-btn-color);
+  //
+  // &_danger override color variable if set it:
+  //
+  // color: var(--s-btn-danger-color, red);
+  @set (color, blue);
+
+  &_danger {
+    @set (color, red);
+  }
 }
 
 /*
-// font-size: mypow(2, 5, 9);
-
 :root {
   --btn-background-color-active: theme('colors.neutral.dark');
   --btn-background-color-disabled: theme('colors.neutral.DEFAULT');
