@@ -9,7 +9,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
-    "declaration": true,
+    "declaration": false,
     "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,

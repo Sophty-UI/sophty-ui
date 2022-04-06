@@ -1,16 +1,19 @@
 import ESLintPlugin from 'eslint-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import Package from 'package-json-helper';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import pkg from '../package.json';
 import plugin from '../src/plugin';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const pkg = new Package(path.resolve(dirname, '../package.json'));
+
+await pkg.read();
 
 const config = {
   mode: 'development',
-  entry: { [`scripts/app-${pkg.version}`]: path.resolve(dirname, './src/index.tsx') },
+  entry: { [`scripts/app-${pkg.version ?? ''}`]: path.resolve(dirname, './src/index.tsx') },
   output: {
     path: path.resolve(dirname, './public/js'),
     publicPath: '',
