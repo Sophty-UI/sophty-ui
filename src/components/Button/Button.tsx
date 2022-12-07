@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { ButtonHTMLAttributes, DetailedHTMLProps, ReactElement } from 'react';
 
-import './style.css';
+import styles from './style.scss';
 
 export enum ButtonViewType {
   Danger = 'danger',
@@ -30,7 +30,7 @@ const Button = ({
   <button
     {...props}
     className={clsx(
-      'btn',
+      styles.btn,
       {
         [ButtonViewType.Danger]: 'btn_danger',
         [ButtonViewType.Primary]: 'btn_primary',
