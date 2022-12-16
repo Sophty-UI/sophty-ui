@@ -1,31 +1,27 @@
 {
   "root": true,
   "env": {
-    "commonjs": true,
-    "browser": true,
-    "es6": true
+    "node": true,
+    "browser": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json",
-    "tsconfigRootDir": "."
-  },
-  "ignorePatterns": ["**/*.config.js"],
-  "settings": {
-    "react": {
-      "createClass": "createReactClass",
-      "pragma": "React",
-      "version": "detect"
+    "tsconfigRootDir": ".",
+    "ecmaFeatures": {
+      "jsx": true
     }
   },
   "extends": [
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:promise/recommended",
+    "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:promise/recommended",
+    "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
-  "plugins": ["@typescript-eslint", "optimize-regex", "prettier", "promise", "react", "react-hooks"],
+  "plugins": ["@typescript-eslint", "optimize-regex", "jsx-a11y", "react-hooks"],
+  "ignorePatterns": ["*.cjs", "*.js", "bin/*"],
   "rules": {
     "@typescript-eslint/brace-style": ["error", "1tbs"],
     "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
@@ -33,10 +29,160 @@
     "@typescript-eslint/indent": ["error", 2, { "SwitchCase": 1, "ImportDeclaration": 2 }],
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/member-delimiter-style": ["error", { "multiline": { "delimiter": "semi" } }],
+    "@typescript-eslint/member-ordering": [
+      "error",
+      {
+        "classes": {
+          "memberTypes": [
+            // Index signature
+            "signature",
+            // Fields
+            "public-static-field",
+            "protected-static-field",
+            "private-static-field",
+            "public-decorated-field",
+            "protected-decorated-field",
+            "private-decorated-field",
+            "public-instance-field",
+            "protected-instance-field",
+            "private-instance-field",
+            "public-abstract-field",
+            "protected-abstract-field",
+            "public-field",
+            "protected-field",
+            "private-field",
+            "static-field",
+            "instance-field",
+            "abstract-field",
+            "decorated-field",
+            "field",
+            // Constructors
+            "public-constructor",
+            "protected-constructor",
+            "private-constructor",
+            "constructor",
+            // Methods
+            "public-static-method",
+            "protected-static-method",
+            "private-static-method",
+            "public-decorated-method",
+            "protected-decorated-method",
+            "private-decorated-method",
+            "public-instance-method",
+            "protected-instance-method",
+            "private-instance-method",
+            "public-abstract-method",
+            "protected-abstract-method",
+            "public-method",
+            "protected-method",
+            "private-method",
+            "static-method",
+            "instance-method",
+            "abstract-method",
+            "decorated-method",
+            "method"
+          ],
+          "order": "alphabetically"
+        },
+        "default": {
+          "memberTypes": [
+            // Index signature
+            "signature",
+            // Fields
+            "public-static-field",
+            "protected-static-field",
+            "private-static-field",
+            "public-decorated-field",
+            "protected-decorated-field",
+            "private-decorated-field",
+            "public-instance-field",
+            "protected-instance-field",
+            "private-instance-field",
+            "public-abstract-field",
+            "protected-abstract-field",
+            "public-field",
+            "protected-field",
+            "private-field",
+            "static-field",
+            "instance-field",
+            "abstract-field",
+            "decorated-field",
+            "field",
+            // Constructors
+            "public-constructor",
+            "protected-constructor",
+            "private-constructor",
+            "constructor",
+            // Getters
+            "public-static-get",
+            "protected-static-get",
+            "private-static-get",
+            "public-decorated-get",
+            "protected-decorated-get",
+            "private-decorated-get",
+            "public-instance-get",
+            "protected-instance-get",
+            "private-instance-get",
+            "public-abstract-get",
+            "protected-abstract-get",
+            "public-get",
+            "protected-get",
+            "private-get",
+            "static-get",
+            "instance-get",
+            "abstract-get",
+            "decorated-get",
+            "get",
+            // Setters
+            "public-static-set",
+            "protected-static-set",
+            "private-static-set",
+            "public-decorated-set",
+            "protected-decorated-set",
+            "private-decorated-set",
+            "public-instance-set",
+            "protected-instance-set",
+            "private-instance-set",
+            "public-abstract-set",
+            "protected-abstract-set",
+            "public-set",
+            "protected-set",
+            "private-set",
+            "static-set",
+            "instance-set",
+            "abstract-set",
+            "decorated-set",
+            "set",
+            // Methods
+            "public-static-method",
+            "protected-static-method",
+            "private-static-method",
+            "public-decorated-method",
+            "protected-decorated-method",
+            "private-decorated-method",
+            "public-instance-method",
+            "protected-instance-method",
+            "private-instance-method",
+            "public-abstract-method",
+            "protected-abstract-method",
+            "public-method",
+            "protected-method",
+            "private-method",
+            "static-method",
+            "instance-method",
+            "abstract-method",
+            "decorated-method",
+            "method"
+          ],
+          "order": "alphabetically"
+        }
+      }
+    ],
     "@typescript-eslint/naming-convention": [
       "error",
       { "selector": "interface", "format": ["PascalCase"], "custom": { "regex": "^I[A-Z]", "match": true } }
     ],
+    "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-magic-numbers": [
       "error",
       {
@@ -59,32 +205,6 @@
     "@typescript-eslint/prefer-readonly": "warn",
     "@typescript-eslint/semi": ["error"],
     "@typescript-eslint/unbound-method": "off",
-    "react/no-access-state-in-setstate": "error",
-    "react/no-unescaped-entities": "off",
-    "react/no-danger": "error",
-    "react/no-multi-comp": "error",
-    "react/no-this-in-sfc": "error",
-    "react/prefer-stateless-function": [
-      2,
-      {
-        "ignorePureComponents": true
-      }
-    ],
-    "react/jsx-filename-extension": [
-      "error",
-      {
-        "extensions": [".jsx", ".tsx"]
-      }
-    ],
-    "react/jsx-no-bind": ["error", { "allowArrowFunctions": true }],
-    "react/jsx-no-literals": "off",
-    "react/jsx-no-useless-fragment": "error",
-    "react/jsx-pascal-case": "error",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "off",
-    "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off",
     "array-bracket-newline": ["error", "consistent"],
     "arrow-body-style": ["error", "as-needed"],
     "arrow-parens": ["error", "as-needed"],
@@ -106,7 +226,7 @@
     "new-parens": "error",
     "no-alert": "warn",
     "no-bitwise": "off",
-    "no-confusing-arrow": ["error", { "allowParens": true }],
+    "no-confusing-arrow": ["error", { "allowParens": true, "onlyOneSimpleParam": true }],
     "no-console": "warn",
     "no-dupe-class-members": "off",
     "no-else-return": ["error", { "allowElseIf": false }],
@@ -129,7 +249,7 @@
     "no-template-curly-in-string": "error",
     "no-throw-literal": "error",
     "no-trailing-spaces": "error",
-    "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+    "no-underscore-dangle": "off",
     "no-unneeded-ternary": "error",
     "no-unused-expressions": "error",
     "no-useless-call": "error",
@@ -178,5 +298,28 @@
     "spaced-comment": ["error", "always"],
     "switch-colon-spacing": "error",
     "template-curly-spacing": "error"
+  },
+  "overrides": [
+    {
+      "files": ["*.test.ts", "*.mock.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-magic-numbers": "off",
+        "max-lines-per-function": ["error", { "max": 200 }],
+        "no-underscore-dangle": "off"
+      }
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".ts", ".d.ts"]
+      }
+    },
+
+    "react": {
+      "version": "detect"
+    }
   }
 }
