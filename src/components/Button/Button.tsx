@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { ButtonHTMLAttributes, DetailedHTMLProps, ReactElement } from 'react';
 
-import styles from './style.scss';
+import styles from './style.module.scss';
 
 export enum ButtonViewType {
   Danger = 'danger',

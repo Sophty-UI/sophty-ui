@@ -1,5 +1,7 @@
 import { DetailedHTMLProps, HTMLAttributes, ReactElement } from 'react';
 
+import styles from './style.module.scss';
+
 enum HeadingType {
   H1 = 1,
   H2 = 2,
@@ -14,10 +16,19 @@ export interface ITitleProps extends DetailedHTMLProps<HTMLAttributes<HTMLHeadin
 }
 
 const Title = ({ level = HeadingType.H1, children, ...props }: ITitleProps): ReactElement => {
-  type IHeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  const Tag = `h${Math.max(HeadingType.H1, Math.min(level, HeadingType.H6))}` as IHeadingTag;
+  const Tag = `h${Math.max(HeadingType.H1, Math.min(level, HeadingType.H6))}` as
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6';
 
-  return <Tag {...props}>{children}</Tag>;
+  return (
+    <Tag {...props} className={styles.title}>
+      {children}
+    </Tag>
+  );
 };
 
 export default Title;
