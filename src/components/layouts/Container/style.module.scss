@@ -1,0 +1,49 @@
+@import '../../../theme/variables/breakpoints.module';
+
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+}
+
+.small {
+  background-color: red !important;
+
+  max-width: calc(var(--resolution-sm) - var(--spacing-sm));
+
+  &.container {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+  }
+}
+
+.medium {
+  background-color: blue !important;
+
+  max-width: calc(var(--resolution-md) - var(--spacing-md));
+
+  &.container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}
+
+.large {
+  background-color: green !important;
+
+  max-width: calc(var(--resolution-lg) - var(--spacing-lg));
+}
+
+.extra {
+  background-color: aqua !important;
+
+  max-width: calc(var(--resolution-xl) - var(--spacing-lg));
+}
+
+.super {
+  background-color: orange !important;
+
+  max-width: calc(var(--resolution-sl) - var(--spacing-lg));
+}

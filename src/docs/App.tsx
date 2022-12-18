@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 
-import { Area, Layout } from '../components';
+import { Area, Container, Layout } from '../components/layouts';
 
 const App = (): ReactElement => (
   <div style={{ width: '100vw', height: '100vh' }}>
@@ -10,9 +10,10 @@ const App = (): ReactElement => (
         ['nav', 'main', 'main'],
         ['nav', 'footer', 'footer'],
       ]}
+      gap={[8, 8]}
     >
       <Area key="header" height="auto" semantic="header">
-        <div style={{ backgroundColor: 'lime' }}>header</div>
+        <Container style={{ backgroundColor: 'lime' }}>header</Container>
       </Area>
       <Area key="nav" width={200} semantic="nav">
         <div style={{ backgroundColor: 'lightblue' }}>nav</div>

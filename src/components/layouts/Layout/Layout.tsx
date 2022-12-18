@@ -6,12 +6,36 @@ import { getGridTemplate } from '../../../utils/css';
 import { IAreaProps } from '../Area/Area';
 import styles from './style.module.scss';
 
+export type ILayoutGapProp = number | CSSDataType.Distance<CSSDataType.Length | CSSDataType.Percentage>;
+
 export interface ILayoutProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: ReactElement<IAreaProps> | ReactElement<IAreaProps>[];
+  /**
+   * Sets the gaps (gutters) between rows and columns.
+   *
+   * @example For example `gap={[10, '2em']}` set:
+   * ```css
+   *   row-gap: 10px;
+   *   column-gap: 2em;
+   * ```
+   */
+  gap?: ILayoutGapProp | [ILayoutGapProp, ILayoutGapProp];
+  /**
+   * Layout template
+   *
+   * @example Grid layout example:
+   * ```js
+   * [
+   *   ['header', 'header', 'header'],
+   *   ['nav', 'main', 'main'],
+   *   ['nav', 'footer', 'footer'],
+   * ]
+   * ```
+   */
   template: string[][];
 }
 
-const Layout = ({ className, children, template, style = {}, ...props }: ILayoutProps): ReactElement => {
+const Layout = ({ className, children, template, style = {}, gap, ...props }: ILayoutProps): ReactElement => {
   const [body, gridTemplate] = useMemo(() => {
     const rows = new Map<string, CSSDataType.TrackBreadth>();
     const cols = new Map<string, CSSDataType.TrackBreadth>();
@@ -32,7 +56,19 @@ const Layout = ({ className, children, template, style = {}, ...props }: ILayout
   }, [children, template]);
 
   return (
-    <div {...props} className={clsx(className, styles.layout)} style={{ ...style, gridTemplate }}>
+    <div
+      {...props}
+      className={clsx(className, styles.layout)}
+      style={{
+        ...style,
+        gridTemplate,
+        gap:
+          gap &&
+          (Array.isArray(gap) ? gap : [gap, gap])
+            .map(value => (typeof value === 'number' ? `${value}px` : value))
+            .join(' '),
+      }}
+    >
       {body}
     </div>
   );
