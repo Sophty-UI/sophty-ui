@@ -6,6 +6,8 @@
   margin-left: auto;
   padding-left: var(--spacing-sm);
   padding-right: var(--spacing-sm);
+  display: block;
+  box-sizing: border-box;
 }
 
 .small {

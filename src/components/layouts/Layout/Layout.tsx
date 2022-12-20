@@ -3,7 +3,7 @@ import { Children, cloneElement, DetailedHTMLProps, HTMLAttributes, ReactElement
 
 import { CSSDataType } from '../../../typings/css';
 import { getGridTemplate } from '../../../utils/css';
-import { IAreaProps } from '../Area/Area';
+import { IAreaProps } from './parts/Area';
 import styles from './style.module.scss';
 
 export type ILayoutGapProp = number | CSSDataType.Distance<CSSDataType.Length | CSSDataType.Percentage>;
@@ -49,7 +49,7 @@ const Layout = ({ className, children, template, style = {}, gap, ...props }: IL
         if (height) rows.set(child.key, typeof height === 'number' ? `${height}px` : height);
         if (width) cols.set(child.key, typeof width === 'number' ? `${width}px` : width);
 
-        return cloneElement(child, { _area: child.key });
+        return cloneElement(child, { area: child.key });
       }),
       getGridTemplate({ template, rows, cols }),
     ];

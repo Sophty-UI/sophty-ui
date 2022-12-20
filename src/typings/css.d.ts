@@ -34,6 +34,5 @@ export namespace CSSDataType {
   export type Percentage = '%';
   export type Flex = 'fr';
   export type Distance<T extends string> = `${number}${T}`;
-
   export type TrackBreadth = Distance<Length | Flex | Percentage> | 'auto' | 'max-content' | 'min-content' | 'none';
 }

@@ -1,9 +1,9 @@
 import { DetailedHTMLProps, HTMLAttributes, Key, ReactElement, ReactNode } from 'react';
 
-import { CSSDataType } from '../../../typings/css';
+import { CSSDataType } from '../../../../typings/css';
 
 export interface IAreaProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  _area?: Key | null;
+  area?: Key;
   children: ReactNode;
   height?: CSSDataType.TrackBreadth | number;
   key: string;
@@ -11,7 +11,7 @@ export interface IAreaProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElem
   width?: CSSDataType.TrackBreadth | number;
 }
 
-const Area = ({ _area, height, width, children, style = {}, semantic = 'div', ...props }: IAreaProps): ReactElement => {
+const Area = ({ area, height, width, children, style = {}, semantic = 'div', ...props }: IAreaProps): ReactElement => {
   const Tag = `${semantic}` as typeof semantic;
 
   return (
@@ -19,7 +19,7 @@ const Area = ({ _area, height, width, children, style = {}, semantic = 'div', ..
       {...props}
       style={{
         ...style,
-        gridArea: _area ?? undefined,
+        gridArea: area,
         display: 'inline-grid',
         width: typeof width === 'number' ? width : undefined,
         height: typeof height === 'number' ? height : undefined,
