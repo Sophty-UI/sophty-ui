@@ -25,7 +25,12 @@ export default {
   ],
   plugins: [
     resolve({ browser: true }),
-    postcss({ modules: true, use: ['sass'] }),
+    postcss({
+      use: ['sass'],
+      modules: {
+        localsConvention: 'camelCaseOnly',
+      },
+    }),
     commonjs(),
     typescript({ include: ['src/**/*'], exclude: ['src/docs/**/*'] }),
     (() => ({

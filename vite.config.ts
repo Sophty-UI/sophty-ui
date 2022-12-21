@@ -5,4 +5,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   root: './src/docs',
   plugins: [react()],
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
 });
