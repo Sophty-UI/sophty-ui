@@ -1,0 +1,18 @@
+$flex-grid-size: 24;
+
+.col {
+  box-sizing: border-box;
+  display: block;
+  min-height: 1px;
+}
+
+@for $span from 1 through $flex-grid-size {
+  .span-#{$span} {
+    flex: 0 0 calc(100% / $flex-grid-size * $span);
+    max-width: calc(100% / $flex-grid-size * $span);
+  }
+}
+
+:export {
+  size: $flex-grid-size;
+}

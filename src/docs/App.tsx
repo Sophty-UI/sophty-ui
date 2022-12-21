@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 
-import { Container, Grid, Layout } from '../components/layouts';
+import { Col, Container, Grid, Layout, Row } from '../components/layouts';
 
 // eslint-disable-next-line max-lines-per-function
 const App = (): ReactElement => (
@@ -20,7 +20,34 @@ const App = (): ReactElement => (
         <div style={{ backgroundColor: 'lightblue' }}>nav</div>
       </Layout.Area>
       <Layout.Area key="main" height="1fr" semantic="main">
-        <div style={{ backgroundColor: 'yellow' }}>main</div>
+        <div style={{ backgroundColor: 'yellow' }}>
+          <Row gap={[8, 8]} align="center" justify="center">
+            <Col flex={4} style={{ backgroundColor: '#1677ffbf', padding: 8, color: 'white' }}>
+              4/10
+            </Col>
+            <Col flex={6} style={{ backgroundColor: '#1677ff', padding: 8, color: 'white' }}>
+              6/10
+            </Col>
+          </Row>
+          <Row gap={[8, 8]} align="center" justify="center" wrap="nowrap">
+            <Col flex="1 1 200px" style={{ backgroundColor: '#1677ffbf', padding: 8, color: 'white' }}>
+              1 1 200px
+            </Col>
+
+            <Col flex="0 1 300px" style={{ backgroundColor: '#1677ff', padding: 8, color: 'white' }}>
+              0 1 300px
+            </Col>
+          </Row>
+          <Row gap={[8, 8]} align="center" justify="center">
+            <Col flex={4}>FLEX COL auto</Col>
+            <Col span={4}>FLEX COL 4</Col>
+            <Col span={4}>FLEX COL 4</Col>
+            <Col span={8}>FLEX COL 8</Col>
+            <Col span={8} style={{ backgroundColor: 'white' }}>
+              FLEX COL 8
+            </Col>
+          </Row>
+        </div>
       </Layout.Area>
       <Layout.Area key="footer" height="min-content" semantic="footer">
         <Grid style={{ backgroundColor: 'red' }}>

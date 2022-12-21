@@ -1,15 +1,47 @@
 import clsx from 'clsx';
-import { Children, cloneElement, DetailedHTMLProps, HTMLAttributes, ReactElement, useMemo } from 'react';
+import { Children, cloneElement, ForwardedRef, forwardRef, ReactElement, useMemo } from 'react';
 
-import { CSSDataType } from '../../../typings/css';
-import { getGridTemplate } from '../../../utils/css';
+import { IBoxProps } from '../../../types/box';
+import { ITrackBreadth } from '../../../types/css';
+import { IFlexGap } from '../../../types/flex';
+import { getGap } from '../../../utils/flex';
 import { IAreaProps } from './parts/Area';
 import styles from './style.module.scss';
 
-export type ILayoutGapProp = number | CSSDataType.Distance<CSSDataType.Length | CSSDataType.Percentage>;
+const minmax = (list: ITrackBreadth[]): string => (list.length > 1 ? `minmax(${list.join(', ')})` : list[0] ?? 'auto');
+const getGridTemplate = (options: {
+  cols: Map<string, ITrackBreadth>;
+  rows: Map<string, ITrackBreadth>;
+  template: string[][];
+}): string => {
+  const colWidths = new Map<number, Set<ITrackBreadth>>();
+  const [rowsTemplate, colsCount] = options.template.reduce(
+    ([template, length], row) => {
+      const rowHeights = row.reduce<ITrackBreadth[]>((acc, key, colIndex) => {
+        const height = options.rows.get(key);
+        const widths = options.cols.get(key);
 
-export interface ILayoutProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  children: ReactElement<IAreaProps> | ReactElement<IAreaProps>[];
+        if (height && !acc.includes(height)) acc.push(height);
+        if (widths) colWidths.set(colIndex, (colWidths.get(colIndex) ?? new Set()).add(widths));
+
+        return acc;
+      }, []);
+
+      return [`${template} \n "${row.join(' ')}" ${minmax(rowHeights)}`, Math.max(length, row.length)];
+    },
+    ['', 0] as [string, number]
+  );
+
+  return [
+    rowsTemplate,
+    [...new Array(colsCount)].reduce<string>(
+      (acc, _, index) => `${acc} ${minmax([...(colWidths.get(index)?.values() ?? [])])}`,
+      ''
+    ),
+  ].join(' / ');
+};
+
+export interface ILayoutProps extends IBoxProps<ReactElement<IAreaProps>> {
   /**
    * Sets the gaps (gutters) between rows and columns.
    *
@@ -19,7 +51,7 @@ export interface ILayoutProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivEl
    *   column-gap: 2em;
    * ```
    */
-  gap?: ILayoutGapProp | [ILayoutGapProp, ILayoutGapProp];
+  gap?: IFlexGap | [IFlexGap, IFlexGap];
   /**
    * Layout template
    *
@@ -35,17 +67,19 @@ export interface ILayoutProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivEl
   template: string[][];
 }
 
-const Layout = ({ className, children, template, style = {}, gap, ...props }: ILayoutProps): ReactElement => {
+const Layout = (
+  { className, children, template, style = {}, gap, ...props }: ILayoutProps,
+  ref: ForwardedRef<HTMLDivElement>
+): ReactElement => {
   const [body, gridTemplate] = useMemo(() => {
-    const rows = new Map<string, CSSDataType.TrackBreadth>();
-    const cols = new Map<string, CSSDataType.TrackBreadth>();
+    const rows = new Map<string, ITrackBreadth>();
+    const cols = new Map<string, ITrackBreadth>();
 
     return [
       Children.map(children, child => {
         const { width, height } = child.props;
 
         if (typeof child.key !== 'string') throw new Error('Layout.Area key is required!');
-
         if (height) rows.set(child.key, typeof height === 'number' ? `${height}px` : height);
         if (width) cols.set(child.key, typeof width === 'number' ? `${width}px` : width);
 
@@ -58,20 +92,13 @@ const Layout = ({ className, children, template, style = {}, gap, ...props }: IL
   return (
     <div
       {...props}
+      ref={ref}
       className={clsx(className, styles.layout)}
-      style={{
-        ...style,
-        gridTemplate,
-        gap:
-          gap &&
-          (Array.isArray(gap) ? gap : [gap, gap])
-            .map(value => (typeof value === 'number' ? `${value}px` : value))
-            .join(' '),
-      }}
+      style={{ ...style, gridTemplate, gap: getGap(gap) }}
     >
       {body}
     </div>
   );
 };
 
-export default Layout;
+export default forwardRef<HTMLDivElement, ILayoutProps>(Layout);

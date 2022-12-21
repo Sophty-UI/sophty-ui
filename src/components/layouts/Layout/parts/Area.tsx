@@ -1,14 +1,14 @@
-import { DetailedHTMLProps, HTMLAttributes, Key, ReactElement, ReactNode } from 'react';
+import { Key, ReactElement } from 'react';
 
-import { CSSDataType } from '../../../../typings/css';
+import { IBoxProps } from '../../../../types/box';
+import { ITrackBreadth } from '../../../../types/css';
 
-export interface IAreaProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export interface IAreaProps extends IBoxProps {
   area?: Key;
-  children: ReactNode;
-  height?: CSSDataType.TrackBreadth | number;
+  height?: ITrackBreadth | number;
   key: string;
   semantic?: 'div' | 'aside' | 'footer' | 'header' | 'main' | 'nav' | 'section';
-  width?: CSSDataType.TrackBreadth | number;
+  width?: ITrackBreadth | number;
 }
 
 const Area = ({ area, height, width, children, style = {}, semantic = 'div', ...props }: IAreaProps): ReactElement => {

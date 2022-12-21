@@ -1,12 +1,12 @@
-import { DetailedHTMLProps, HTMLAttributes, ReactElement, ReactNode } from 'react';
+import { ReactElement } from 'react';
 
-import { IGridSpan } from '../../../../types/grid';
+import { IBoxProps } from '../../../../types/box';
+import { Resolution } from '../../../../types/resolution';
 
-export interface IGridItemProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  children: ReactNode;
+export interface IGridItemProps extends IBoxProps {
   columnEnd?: number;
   columnStart?: number;
-  span?: number | IGridSpan;
+  span?: number | { [key in Resolution]?: number };
 }
 
 const GridItem = ({ children, style, columnStart, columnEnd, span, ...props }: IGridItemProps): ReactElement => {

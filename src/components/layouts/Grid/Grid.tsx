@@ -1,18 +1,21 @@
 import clsx from 'clsx';
-import { Children, cloneElement, DetailedHTMLProps, HTMLAttributes, ReactElement, useMemo } from 'react';
+import { Children, cloneElement, ForwardedRef, forwardRef, ReactElement, useMemo } from 'react';
 
 import useResolution from '../../../hooks/useResolution';
-import { GRID_COLUMNS_SIZE } from '../../../types/grid';
+import { IBoxProps } from '../../../types/box';
 import { Resolution, RESOLUTIONS } from '../../../types/resolution';
 import { IGridItemProps } from './parts/GridItem';
 import styles from './style.module.scss';
 
-export interface IGridProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  children: ReactElement<IGridItemProps> | ReactElement<IGridItemProps>[];
+export interface IGridProps extends IBoxProps<ReactElement<IGridItemProps>> {
   columns?: number;
 }
 
-const Grid = ({ children, className, columns = GRID_COLUMNS_SIZE, ...props }: IGridProps): ReactElement => {
+// TODO: offset - to push or pull columns
+const Grid = (
+  { children, className, columns = 12, ...props }: IGridProps,
+  ref: ForwardedRef<HTMLDivElement>
+): ReactElement => {
   const activeResolution = useResolution();
   const body = useMemo(() => {
     const breakpoint = RESOLUTIONS.findIndex(resolution => resolution === activeResolution);
@@ -40,10 +43,10 @@ const Grid = ({ children, className, columns = GRID_COLUMNS_SIZE, ...props }: IG
   }, [children, activeResolution, columns]);
 
   return (
-    <div {...props} className={clsx(className, styles.grid)}>
+    <div {...props} ref={ref} className={clsx(className, styles.grid)}>
       {body}
     </div>
   );
 };
 
-export default Grid;
+export default forwardRef<HTMLDivElement, IGridProps>(Grid);
