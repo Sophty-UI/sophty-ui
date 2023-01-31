@@ -4,44 +4,12 @@ import { Children, cloneElement, ForwardedRef, forwardRef, ReactElement, useMemo
 import { IBoxProps } from '../../../types/box';
 import { ITrackBreadth } from '../../../types/css';
 import { IFlexGap } from '../../../types/flex';
-import { getGap } from '../../../utils/flex';
-import { IAreaProps } from './parts/Area';
+import { parseGap } from '../../../utils/flex';
+import Area, { IAreaProps } from './parts/Area';
 import styles from './style.module.scss';
+import { grid } from './utils/grid';
 
-const minmax = (list: ITrackBreadth[]): string => (list.length > 1 ? `minmax(${list.join(', ')})` : list[0] ?? 'auto');
-const getGridTemplate = (options: {
-  cols: Map<string, ITrackBreadth>;
-  rows: Map<string, ITrackBreadth>;
-  template: string[][];
-}): string => {
-  const colWidths = new Map<number, Set<ITrackBreadth>>();
-  const [rowsTemplate, colsCount] = options.template.reduce(
-    ([template, length], row) => {
-      const rowHeights = row.reduce<ITrackBreadth[]>((acc, key, colIndex) => {
-        const height = options.rows.get(key);
-        const widths = options.cols.get(key);
-
-        if (height && !acc.includes(height)) acc.push(height);
-        if (widths) colWidths.set(colIndex, (colWidths.get(colIndex) ?? new Set()).add(widths));
-
-        return acc;
-      }, []);
-
-      return [`${template} \n "${row.join(' ')}" ${minmax(rowHeights)}`, Math.max(length, row.length)];
-    },
-    ['', 0] as [string, number]
-  );
-
-  return [
-    rowsTemplate,
-    [...new Array(colsCount)].reduce<string>(
-      (acc, _, index) => `${acc} ${minmax([...(colWidths.get(index)?.values() ?? [])])}`,
-      ''
-    ),
-  ].join(' / ');
-};
-
-export interface ILayoutProps extends IBoxProps<ReactElement<IAreaProps>> {
+export interface ILayoutProps extends IBoxProps<ReactElement<IAreaProps, typeof Area>> {
   /**
    * Sets the gaps (gutters) between rows and columns.
    *
@@ -70,7 +38,7 @@ export interface ILayoutProps extends IBoxProps<ReactElement<IAreaProps>> {
 const Layout = (
   { className, children, template, style = {}, gap, ...props }: ILayoutProps,
   ref: ForwardedRef<HTMLDivElement>
-): ReactElement => {
+): ReactElement<ILayoutProps> => {
   const [body, gridTemplate] = useMemo(() => {
     const rows = new Map<string, ITrackBreadth>();
     const cols = new Map<string, ITrackBreadth>();
@@ -85,7 +53,7 @@ const Layout = (
 
         return cloneElement(child, { area: child.key });
       }),
-      getGridTemplate({ template, rows, cols }),
+      grid({ template, rows, cols }),
     ];
   }, [children, template]);
 
@@ -94,7 +62,7 @@ const Layout = (
       {...props}
       ref={ref}
       className={clsx(className, styles.layout)}
-      style={{ ...style, gridTemplate, gap: getGap(gap) }}
+      style={{ ...style, gridTemplate, gap: parseGap(gap) }}
     >
       {body}
     </div>

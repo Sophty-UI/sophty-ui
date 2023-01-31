@@ -11,7 +11,15 @@ export interface IAreaProps extends IBoxProps {
   width?: ITrackBreadth | number;
 }
 
-const Area = ({ area, height, width, children, style = {}, semantic = 'div', ...props }: IAreaProps): ReactElement => {
+const Area = ({
+  area,
+  height,
+  width,
+  children,
+  style = {},
+  semantic = 'div',
+  ...props
+}: IAreaProps): ReactElement<IAreaProps> => {
   const Tag = `${semantic}` as typeof semantic;
 
   return (

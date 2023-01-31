@@ -9,7 +9,7 @@ export interface IThemeProviderProps {
   theme: Partial<ITheme>;
 }
 
-const ThemeProvider = ({ children, theme: localTheme }: IThemeProviderProps): ReactElement => {
+const ThemeProvider = ({ children, theme: localTheme }: IThemeProviderProps): ReactElement<IThemeProviderProps> => {
   const outerTheme = useTheme();
   // TODO: deep merge
   const theme = useMemo(() => ({ ...outerTheme, ...localTheme }), [localTheme, outerTheme]);

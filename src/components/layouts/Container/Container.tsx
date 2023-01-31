@@ -14,7 +14,10 @@ const MODIFICATIONS: { [key in Resolution]?: string } = {
   [Resolution.Small]: styles.small,
 };
 
-const Container = ({ className, children, ...props }: IBoxProps, ref: ForwardedRef<HTMLDivElement>): ReactElement => {
+const Container = (
+  { className, children, ...props }: IBoxProps,
+  ref: ForwardedRef<HTMLDivElement>
+): ReactElement<IBoxProps> => {
   const resolution = useResolution();
 
   return (

@@ -317,7 +317,6 @@
         "extensions": [".ts", ".d.ts"]
       }
     },
-
     "react": {
       "version": "detect"
     }

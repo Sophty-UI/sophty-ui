@@ -1,0 +1,25 @@
+@import '../../../../../theme/variables/colors';
+
+.item {
+  padding-inline: 16px;
+  color: $base-color;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+
+  &:hover {
+    color: $primary-color;
+    opacity: 0.9;
+  }
+
+  &.selected {
+    color: $primary-color;
+  }
+
+  &.disabled {
+    color: $disable-color;
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}

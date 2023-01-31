@@ -5,6 +5,7 @@ import { walk } from 'estree-walker';
 import MagicString from 'magic-string';
 import path from 'path';
 import { OutputBundle, RollupOptions } from 'rollup';
+import copy from 'rollup-plugin-copy';
 import postcss from 'rollup-plugin-postcss';
 
 export default {
@@ -72,5 +73,8 @@ export default {
         });
       },
     }))(),
+    copy({
+      targets: [{ src: 'src/theme/assets/**/*', dest: 'dist/theme/assets' }],
+    }),
   ],
 } as RollupOptions;

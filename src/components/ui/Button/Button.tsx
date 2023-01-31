@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import { ButtonHTMLAttributes, DetailedHTMLProps, ReactElement } from 'react';
+import { ReactElement } from 'react';
 
+import { IDetailedButtonProps } from '../../../types/box';
 import styles from './style.module.scss';
 
 export enum ButtonViewType {
@@ -12,7 +13,7 @@ export enum ButtonViewType {
   Warning = 'warning',
 }
 
-export interface IButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+export interface IButtonProps extends IDetailedButtonProps {
   gradient?: boolean;
   loading?: boolean; // TODO:
   shadow?: boolean;
@@ -26,7 +27,7 @@ const Button = ({
   shadow,
   view = ButtonViewType.Secondary,
   ...props
-}: IButtonProps): ReactElement => (
+}: IButtonProps): ReactElement<IButtonProps> => (
   <button
     {...props}
     className={clsx(

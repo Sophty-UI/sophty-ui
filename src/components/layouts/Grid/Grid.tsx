@@ -3,7 +3,7 @@ import { Children, cloneElement, ForwardedRef, forwardRef, ReactElement, useMemo
 
 import useResolution from '../../../hooks/useResolution';
 import { IBoxProps } from '../../../types/box';
-import { Resolution, RESOLUTIONS } from '../../../types/resolution';
+import { calcSpan } from '../../../utils/flex';
 import { IGridItemProps } from './parts/GridItem';
 import styles from './style.module.scss';
 
@@ -15,32 +15,21 @@ export interface IGridProps extends IBoxProps<ReactElement<IGridItemProps>> {
 const Grid = (
   { children, className, columns = 12, ...props }: IGridProps,
   ref: ForwardedRef<HTMLDivElement>
-): ReactElement => {
-  const activeResolution = useResolution();
+): ReactElement<IGridProps> => {
+  const resolution = useResolution();
   const body = useMemo(() => {
-    const breakpoint = RESOLUTIONS.findIndex(resolution => resolution === activeResolution);
-    const breakpoints = RESOLUTIONS.slice(0, breakpoint);
     const columnEnd = columns + 1;
     let prevPosition = 1;
 
     return Children.map(children, child => {
-      const resolutions = [...breakpoints];
       const columnStart = prevPosition;
-      let { span } = child.props;
-      let value: number | undefined;
+      const span = calcSpan(child.props.span, resolution, columns);
 
-      if (typeof span === 'object') {
-        value = span[activeResolution];
-
-        while (!value && resolutions.length) value = span[resolutions.pop() ?? Resolution.ExtraSmall];
-      } else value = span;
-
-      span = Math.min(value ?? columns, columns);
       prevPosition = prevPosition + span >= columnEnd ? 1 : prevPosition + span;
 
       return cloneElement(child, { columnStart, columnEnd, span });
     });
-  }, [children, activeResolution, columns]);
+  }, [children, resolution, columns]);
 
   return (
     <div {...props} ref={ref} className={clsx(className, styles.grid)}>

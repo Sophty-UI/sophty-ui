@@ -130,3 +130,11 @@ $rose: palette((#fff1f2, #ffe4e6, #fecdd3, #fda4af, #fb7185, #f43f5e, #e11d48, #
 @function rose($shade) {
   @return map.get($rose, $shade);
 }
+
+$title-color: neutral(800) !default;
+$base-color: neutral(800) !default;
+$primary-color: #ff017b !default;
+$secondary-color: #fff !default;
+$disable-color: neutral(800) !default;
+
+$border-color: gray(200) !default;

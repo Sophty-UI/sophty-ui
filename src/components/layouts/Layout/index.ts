@@ -4,7 +4,7 @@ import { default as LayoutBase } from './Layout';
 import { default as Area, IAreaProps } from './parts/Area';
 
 export type ILayoutProps = typeof LayoutBase & {
-  Area: (props: Omit<IAreaProps, 'area'>) => ReactElement;
+  Area: (props: Omit<IAreaProps, 'area'>) => ReactElement<IAreaProps>;
 };
 
 const Layout = LayoutBase as ILayoutProps;

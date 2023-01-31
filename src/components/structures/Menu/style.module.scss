@@ -1,0 +1,16 @@
+.menu {
+  list-style: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  padding-inline-start: 0;
+  line-height: 48px;
+}
+
+.vertical {
+  display: block;
+}
+
+.horizontal {
+  display: flex;
+}
