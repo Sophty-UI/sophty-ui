@@ -18,10 +18,11 @@ const GRID_SIZE = (styles.size && parseInt(styles.size, 10)) || 0;
 const Col = (
   { span, flex, grow, children, className, style, ...props }: IColProps,
   ref: ForwardedRef<HTMLDivElement>
-): ReactElement<IColProps> => {
+): ReactElement<IColProps> | null => {
   const resolution = useResolution();
+  const spanIndex = !flex && span !== undefined ? calcSpan(span, resolution, GRID_SIZE) : undefined;
 
-  return (
+  return spanIndex === 0 ? null : (
     <div
       {...props}
       ref={ref}
@@ -29,7 +30,7 @@ const Col = (
         className,
         styles.col,
         grow && styles.grow,
-        !flex && span !== undefined && styles[`span${calcSpan(span, resolution, GRID_SIZE)}` as keyof typeof styles]
+        spanIndex && styles[`span${spanIndex}` as keyof typeof styles]
       )}
       style={{ ...style, flex: parseFlex(flex) }}
     >

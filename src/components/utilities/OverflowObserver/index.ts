@@ -1,1 +1,1 @@
-export { default } from './Overflow';
+export { default } from './OverflowObserver';

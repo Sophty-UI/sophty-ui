@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { forwardRef, HTMLAttributes, Key, ReactElement, useLayoutEffect, useMemo, useState } from 'react';
+import { HTMLAttributes, Key, ReactElement, useLayoutEffect, useMemo, useState } from 'react';
 
 import { IComponentType } from '../../../types/component';
 import ResizeObserver from '../ResizeObserver';
@@ -7,163 +7,155 @@ import Node from './parts/Node';
 import NodeList from './parts/NodeList';
 import styles from './style.module.scss';
 
-export interface IOverflowProps<T, E = unknown> extends HTMLAttributes<E> {
-  nodes: T[];
-  itemWidth?: number;
-  itemComponent?: IComponentType<T>;
-  component?: IComponentType<T>;
-  onVisibleChange?: (visibleCount: number) => void;
-
-  // -----
-  render: (item: T, props: INodeRenderProps) => ReactElement;
-  getKey: (item: T) => Key;
+export interface IOverflowEvents {
+  onVisibleNodesChange?: (count: number) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, max-lines-per-function
-function Overflow<ItemType = any>(props: IOverflowProps<ItemType>, ref: React.Ref<HTMLDivElement>) {
-  const {
-    nodes,
-    render,
-    getKey,
-    itemWidth = 10,
-    style,
-    className,
-    component: Component = 'div',
-    itemComponent = 'div',
-    onVisibleChange,
-    // ...restProps
-  } = props;
+export interface IOverflowCallbacks<T> {
+  render: (item: T) => ReactElement;
+}
 
-  const [containerWidth, setContainerWidth] = useState();
-  const [itemWidths, setItemWidths] = useState(new Map<React.Key, number>());
+export interface IOverflowProps<T, E> extends HTMLAttributes<E>, IOverflowEvents, IOverflowCallbacks<T> {
+  /** @default div */
+  component?: IComponentType;
+  nodes: T[];
+  options?: {
+    /** @default div */
+    component?: IComponentType;
+    /** @default id */
+    field?: keyof T;
+    /** @default 10 */
+    width?: number;
+  };
+}
+
+function Overflow<T, E = unknown>({
+  component: Component = 'div',
+  nodes,
+  render,
+  ...props
+}: IOverflowProps<T, E>): ReactElement {
+  const [containerWidth, setContainerWidth] = useState<number>();
+  const [nodesWidths, setNodesWidths] = useState(new Map<Key, number>());
   const [prevRestWidth, setPrevRestWidth] = useState(0);
   const [restWidth, setRestWidth] = useState(0);
   const [displayCount, setDisplayCount] = useState<number>();
   const [restReady, setRestReady] = useState(false);
+  const options: Required<typeof props.options> = {
+    component: 'div',
+    field: 'id' as keyof T,
+    width: 10,
+    ...props.options,
+  };
 
-  // ================================= Data =================================
+  const mergedNodes = useMemo((): [Key, T][] => {
+    const list = nodes.length ? nodes.slice(0, Math.min(nodes.length, (containerWidth ?? 0) / options.width)) : nodes;
 
-  const mergedData = useMemo(
-    () => (nodes.length ? nodes.slice(0, Math.min(nodes.length, (containerWidth ?? 0) / itemWidth)) : nodes),
-    [nodes, itemWidth, containerWidth]
+    return list.map((node, index) => [((options && node[options.field]) ?? index) as Key, node]);
+  }, [nodes, options.field, options.width, containerWidth]);
+
+  const omittedNodes = useMemo(
+    () => (nodes.length ? nodes.slice((displayCount ?? 0) + 1) : nodes.slice(mergedNodes.length)),
+    [nodes, mergedNodes, displayCount]
   );
 
-  const omittedItems = useMemo(
-    () => (nodes.length ? nodes.slice((displayCount ?? 0) + 1) : nodes.slice(mergedData.length)),
-    [nodes, mergedData, displayCount]
-  );
-
-  // ================================= Item =================================
-
-  function updateDisplayCount(count: number, notReady?: boolean) {
-    if (displayCount === count) {
-      return;
-    }
-
-    setDisplayCount(count);
-
-    if (!notReady) {
-      setRestReady(count < nodes.length - 1);
-
-      onVisibleChange?.(count);
-    }
-  }
-
-  // ================================= Size =================================
-  function onOverflowResize(_: object, element: HTMLElement) {
+  const resizeHandler = (_: unknown, element: HTMLElement): void => {
     setContainerWidth(element.clientWidth);
-  }
+  };
 
-  function registerSize(key?: React.Key, width?: number) {
-    setItemWidths(origin => {
-      const clone = new Map(origin);
-
-      if (width === undefined) clone.delete(key);
-      else clone.set(key, width);
-
-      return clone;
-    });
-  }
-
-  function registerOverflowSize(_?: React.Key, width?: number): void {
+  const registerRestHandler = (_: unknown, width?: number): void => {
     if (width) setRestWidth(width);
 
     setPrevRestWidth(restWidth);
-  }
+  };
 
-  // ================================ Effect ================================
-  function getItemWidth(index: number) {
-    return itemWidths.get(getKey(mergedData[index], index));
-  }
+  const registerNodeHandler = (key?: React.Key, width?: number): void => {
+    setNodesWidths(origin => {
+      const clone = new Map(origin);
 
-  // eslint-disable-next-line max-lines-per-function
-  useLayoutEffect(() => {
-    if (containerWidth && Math.max(prevRestWidth, restWidth) && mergedData) {
-      let totalWidth = 0;
-
-      const len = mergedData.length;
-      const lastIndex = len - 1;
-
-      // When data count change to 0, reset this since not loop will reach
-      if (!len) {
-        updateDisplayCount(0);
-
-        return;
+      if (key !== undefined) {
+        if (width === undefined) clone.delete(key);
+        else clone.set(key, width);
       }
 
-      for (let i = 0; i < len; i += 1) {
-        let currentItemWidth = itemWidths.get(getKey(mergedData[i], i));
-        let lastItemWidth = itemWidths.get(getKey(mergedData[lastIndex], lastIndex))!;
+      return clone;
+    });
+  };
 
-        // Break since data not ready
-        if (currentItemWidth === undefined) {
-          updateDisplayCount(i - 1, true);
-          break;
+  useLayoutEffect(() => {
+    if (containerWidth && Math.max(prevRestWidth, restWidth) && mergedNodes) {
+      let nextDisplayCount: number | undefined;
+      let isReady = true;
+
+      // When data count change to 0, reset this since not loop will reach
+      if (mergedNodes.length) {
+        const lastNodeIndex = mergedNodes.length - 1;
+        const [lastNodeId] = mergedNodes[lastNodeIndex] ?? [];
+        const lastNodeWidth = (lastNodeId !== undefined && nodesWidths.get(lastNodeId)) || 0;
+        let totalWidth = 0;
+        let currentNodeId;
+        let currentNodeWidth;
+        let i = 0;
+
+        while (i < mergedNodes.length && nextDisplayCount === undefined) {
+          [currentNodeId] = mergedNodes[i] ?? [];
+          currentNodeWidth = (currentNodeId !== undefined && nodesWidths.get(currentNodeId)) || undefined;
+
+          // Since data not ready
+          if (currentNodeWidth !== undefined) {
+            // Find best match
+            totalWidth += currentNodeWidth;
+
+            if (
+              // Only one means `totalWidth` is the final width
+              (lastNodeIndex === 0 && totalWidth <= (containerWidth ?? 0)) ||
+              // Last two width will be the final width
+              (i === lastNodeIndex - 1 && totalWidth + lastNodeWidth <= (containerWidth ?? 0))
+            ) {
+              // Additional check if match the end
+              nextDisplayCount = lastNodeIndex;
+            } else if (totalWidth + Math.max(prevRestWidth, restWidth) > (containerWidth ?? 0)) {
+              // Can not hold all the content to show rest
+              nextDisplayCount = i - 1;
+            }
+          } else {
+            nextDisplayCount = i - 1;
+            isReady = false;
+          }
+
+          i++;
         }
+      } else nextDisplayCount = 0;
 
-        // Find best match
-        totalWidth += currentItemWidth;
+      if (nextDisplayCount !== undefined && displayCount !== nextDisplayCount) {
+        setDisplayCount(nextDisplayCount);
 
-        if (
-          // Only one means `totalWidth` is the final width
-          (lastIndex === 0 && totalWidth <= (containerWidth ?? 0)) ||
-          // Last two width will be the final width
-          (i === lastIndex - 1 && totalWidth + lastItemWidth <= (containerWidth ?? 0))
-        ) {
-          // Additional check if match the end
-          updateDisplayCount(lastIndex);
-          break;
-        } else if (totalWidth + Math.max(prevRestWidth, restWidth) > (containerWidth ?? 0)) {
-          // Can not hold all the content to show rest
-          updateDisplayCount(i - 1);
-          break;
+        if (isReady) {
+          setRestReady(nextDisplayCount < nodes.length - 1);
+          props.onVisibleNodesChange?.(nextDisplayCount);
         }
       }
     }
-  }, [containerWidth, itemWidths, restWidth, getKey, mergedData]);
-
-  // ================================ Render ================================
-  const displayRest = restReady && !!omittedItems.length;
+  }, [containerWidth, nodesWidths, restWidth, mergedNodes]);
 
   return (
-    <ResizeObserver onResize={onOverflowResize}>
+    <ResizeObserver onResize={resizeHandler}>
       {
-        <Component className={clsx(className, styles.container)} style={style} ref={ref}>
+        <Component className={clsx(props.className, styles.container)} style={props.style}>
           <NodeList
-            items={mergedData}
-            getKey={getKey}
+            nodes={mergedNodes}
             render={render}
             count={displayCount}
-            register={registerSize}
-            component={itemComponent}
+            register={registerNodeHandler}
+            component={options.component}
           />
           <Node
-            item={`+ ${omittedItems.length} ...`}
-            order={displayRest ? displayCount ?? 0 : Number.MAX_SAFE_INTEGER}
-            register={registerOverflowSize}
-            display={displayRest}
-            render={item => <div>{item}</div>}
-            component={itemComponent}
+            node="..."
+            order={(displayCount ?? 0) + 1}
+            register={registerRestHandler}
+            display={restReady && !!omittedNodes.length}
+            render={node => <div>{node}</div>}
+            component={options.component}
           />
         </Component>
       }
@@ -171,4 +163,4 @@ function Overflow<ItemType = any>(props: IOverflowProps<ItemType>, ref: React.Re
   );
 }
 
-export default forwardRef(Overflow);
+export default Overflow;

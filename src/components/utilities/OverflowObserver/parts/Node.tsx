@@ -10,32 +10,32 @@ export interface INodeCallbacks<T> {
   render: (item: T) => ReactElement;
 }
 
-export interface INodeProps<T, E = unknown> extends INodeCallbacks<T> {
-  component?: IComponentType<E>;
+export interface INodeProps<T> extends INodeCallbacks<T> {
+  component?: IComponentType;
   display: boolean;
-  item: T;
+  id?: Key;
+  node: T;
   order: number;
-  uid?: Key;
 }
 
 function Node<T>({
-  item,
-  uid,
+  node,
+  id,
   order,
   display,
   component: Component = 'div',
   ...callbacks
 }: INodeProps<T>): ReactElement {
-  useEffect(() => () => callbacks.register(uid), []);
+  useEffect(() => () => callbacks.register(id), []);
 
   return (
-    <ResizeObserver onResize={({ offsetWidth }) => callbacks.register(uid, offsetWidth)}>
+    <ResizeObserver onResize={({ offsetWidth }) => callbacks.register(id, offsetWidth)}>
       <Component
         className={clsx(styles.node, !display && styles.hidden)}
         style={display ? { order } : undefined}
         aria-hidden={display ? undefined : true}
       >
-        {callbacks.render(item)}
+        {callbacks.render(node)}
       </Component>
     </ResizeObserver>
   );

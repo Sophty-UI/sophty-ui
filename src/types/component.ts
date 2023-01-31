@@ -1,7 +1,7 @@
 import { ComponentType as ComponentTypeBase, FC, ForwardRefExoticComponent, ReactHTML } from 'react';
 
-export type IComponentType<T = HTMLElement> =
-  | ComponentTypeBase<T>
-  | ForwardRefExoticComponent<T>
-  | FC<T>
+export type IComponentType =
+  | ComponentTypeBase<unknown>
+  | ForwardRefExoticComponent<unknown>
+  | FC<unknown>
   | keyof ReactHTML;

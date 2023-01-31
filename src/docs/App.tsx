@@ -1,11 +1,10 @@
 import { ReactElement, useEffect, useState } from 'react';
 
 import { Col, Grid, Layout, Row } from '../components/layouts';
-import { Header, Menu } from '../components/structures';
+import { Header } from '../components/structures';
 import { Logo } from '../components/ui';
 import { ResizeObserver } from '../components/utilities';
 import OverflowObserver from '../components/utilities/OverflowObserver/OverflowObserver';
-import { INodeRenderProps } from '../components/utilities/OverflowObserver/parts/Node';
 import logo from './public/images/logo.svg';
 
 import '../theme/assets/preflight.css';
@@ -91,6 +90,7 @@ function renderItem(item: IItemType): ReactElement {
 
 // eslint-disable-next-line max-lines-per-function, @typescript-eslint/explicit-function-return-type
 const Demo = () => {
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   const [data, setData] = useState(createData(200));
 
   return (
@@ -120,7 +120,7 @@ const Demo = () => {
           marginTop: 4,
         }}
       >
-        <OverflowObserver nodes={data} render={renderItem} getKey={item => item.id} />
+        <OverflowObserver nodes={data} render={renderItem} />
       </div>
     </div>
   );
@@ -217,8 +217,8 @@ const App = (): ReactElement => {
             </Grid.Item>
             <Grid.Item style={{ backgroundColor: 'lightgray', border: '1px solid gray' }}>Col 6 auto</Grid.Item>
             <Grid.Item style={{ backgroundColor: 'ButtonFace', border: '1px solid gray' }}>
-              <ResizeObserver onResize={(a, b) => console.log('333', a.height, a.width, '444', b)}>
-                <div ref={() => console.log('3')}>123</div>
+              <ResizeObserver>
+                <div>123</div>
               </ResizeObserver>
             </Grid.Item>
           </Grid>

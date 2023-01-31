@@ -5,6 +5,7 @@
   padding: 0;
   padding-inline-start: 0;
   line-height: 48px;
+  width: 100%;
 }
 
 .vertical {
@@ -13,4 +14,5 @@
 
 .horizontal {
   display: flex;
+  align-items: flex-end;
 }

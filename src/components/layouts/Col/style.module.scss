@@ -5,14 +5,6 @@ $flex-grid-size: 24;
   min-height: 1px;
   max-width: 100%;
 
-  &.span-0 {
-    display: none;
-
-    &.grow {
-      flex: auto;
-    }
-  }
-
   @for $span from 1 through $flex-grid-size {
     &.span-#{$span} {
       flex: 0 0 calc(100% / $flex-grid-size * $span);

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { MouseEvent, ReactElement, useCallback, useState } from 'react';
 
 import { IDetailedProps } from '../../../types/box';
+import OverflowObserver from '../../utilities/OverflowObserver';
 import MenuItem, { IMenuItemProps } from './parts/Item';
 import styles from './style.module.scss';
 
@@ -36,9 +37,12 @@ const Menu = ({
 
   return (
     <ul {...props} className={clsx(className, styles.menu, styles[mode])}>
-      {items.map(item => (
-        <MenuItem key={item.id} {...item} selected={selected === item.id} onClick={handleClick} />
-      ))}
+      <OverflowObserver
+        nodes={items}
+        render={(item: Omit<IMenuItemProps, 'onClick' | 'selected'>) => (
+          <MenuItem {...item} selected={selected === item.id} onClick={handleClick} />
+        )}
+      />
     </ul>
   );
 };
