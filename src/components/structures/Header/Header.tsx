@@ -14,8 +14,8 @@ export interface IHeaderProps extends IDetailedProps<HTMLDivElement> {
   menu?: IMenuProps;
 }
 
-const LOGO_SPAN = { xs: 24, sm: 24, md: 6, lg: 6, xl: 4, sl: 4 };
-const MENU_SPAN = { xs: 0, sm: 0, md: 18, lg: 18, xl: 20, sl: 20 };
+const LOGO_SPAN = { xs: 12, sm: 12, md: 6, lg: 6, xl: 4, sl: 4 };
+const MENU_SPAN = { xs: 12, sm: 12, md: 18, lg: 18, xl: 20, sl: 20 };
 
 // TODO: Mobile side menu
 
@@ -28,18 +28,10 @@ const Header = (
 
   return (
     <Container {...props} ref={ref} className={clsx(className, styles.header)}>
-      <Row className={styles.container} align="center" justify="end">
+      <Row className={styles.container} align="center" justify="end" wrap={false}>
         {(!!logo || !!extra) && (
-          <Col span={LOGO_SPAN} grow={!isMobile}>
-            <Row align="center" justify={isMobile ? 'space-between' : 'start'}>
-              {!!menu && isMobile && (
-                <Col grow>
-                  <Menu {...menu} mode="vertical" />
-                </Col>
-              )}
-              {!!logo && <Col grow>{logo}</Col>}
-              {!!extra && isMobile && <Col>{extra}</Col>}
-            </Row>
+          <Col span={LOGO_SPAN} grow>
+            {logo}
           </Col>
         )}
         {!!menu && (

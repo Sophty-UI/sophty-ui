@@ -74,19 +74,19 @@ function createData(count: number): IItemType[] {
   return data;
 }
 
-function renderItem(item: IItemType): ReactElement {
-  return (
-    <div
-      style={{
-        margin: '0 16px 0 8px',
-        padding: '4px 8px',
-        background: 'rgba(255, 0, 0, 0.2)',
-      }}
-    >
-      {item.label}
-    </div>
-  );
-}
+const renderItem = ({ label, style, className }: IItemType): ReactElement => (
+  <div
+    className={className}
+    style={{
+      ...style,
+      margin: '0 16px 0 8px',
+      padding: '4px 8px',
+      background: 'rgba(255, 0, 0, 0.2)',
+    }}
+  >
+    {label}
+  </div>
+);
 
 // eslint-disable-next-line max-lines-per-function, @typescript-eslint/explicit-function-return-type
 const Demo = () => {
@@ -120,10 +120,11 @@ const Demo = () => {
           marginTop: 4,
         }}
       >
-        <OverflowObserver nodes={data} render={renderItem} />
+        <OverflowObserver nodes={data} node={{ component: renderItem }} />
       </div>
     </div>
   );
+  // <Demo />
 };
 
 // -------------------------------------------------------------
@@ -146,7 +147,6 @@ const App = (): ReactElement => {
     >
       <Layout.Area key="header" height="auto" semantic="header">
         <Header logo={<Logo src={logo} alt="logo" name="Sophty UI" />} menu={{ items: MENU }} extra={<div>111</div>} />
-        <Demo />
       </Layout.Area>
       <Layout.Area key="nav" width={200} semantic="nav">
         <div style={{ backgroundColor: 'lightblue' }}>nav</div>

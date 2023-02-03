@@ -53,7 +53,7 @@ const Row = (
     () => ({
       alignItems: ALIGN_MAP[(typeof align === 'string' ? align : (align ?? {})[resolution]) ?? 'none'],
       justifyContent: typeof justify === 'string' ? justify : (justify ?? {})[resolution],
-      flexFlow: `${direction} ${typeof wrap === 'string' ? wrap : 'wrap'}`,
+      flexFlow: `${direction} ${wrap === true ? 'wrap' : wrap || 'nowrap'}`,
       gap: parseGap(gap),
     }),
     [resolution, gap, align, justify, direction, wrap]

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MouseEvent, ReactElement, ReactNode } from 'react';
+import { ForwardedRef, forwardRef, MouseEvent, ReactElement, ReactNode } from 'react';
 
 import { IDetailedProps } from '../../../../../types/box';
 import styles from './style.module.scss';
@@ -16,22 +16,17 @@ export interface IMenuItemProps extends Omit<IDetailedProps<HTMLLIElement>, 'onC
   selected?: boolean;
 }
 
-const MenuItem = ({
-  className,
-  disabled,
-  id,
-  label,
-  onClick,
-  selected,
-  role = 'menu-item',
-  ...props
-}: IMenuItemProps): ReactElement<IMenuItemProps> => {
+const MenuItem = (
+  { className, disabled, id, label, onClick, selected, role = 'menu-item', ...props }: IMenuItemProps,
+  ref: ForwardedRef<HTMLLIElement>
+): ReactElement<IMenuItemProps> => {
   const handleClick = (event: MouseEvent<HTMLLIElement>): void => onClick(event, id);
 
   return (
     <li
-      key={id}
       {...props}
+      ref={ref}
+      key={id}
       role={role}
       className={clsx(className, styles.item, disabled && styles.disabled, selected && styles.selected)}
       onClick={handleClick}
@@ -41,4 +36,4 @@ const MenuItem = ({
   );
 };
 
-export default MenuItem;
+export default forwardRef<HTMLLIElement, IMenuItemProps>(MenuItem);

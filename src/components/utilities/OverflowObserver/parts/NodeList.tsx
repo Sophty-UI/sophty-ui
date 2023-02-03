@@ -1,34 +1,34 @@
-import { Key, ReactElement, useCallback } from 'react';
+import { ForwardRefExoticComponent, Key, ReactElement } from 'react';
 
-import { IComponentType } from '../../../../types/component';
-import Node from './Node';
+import Node, { INodeExtendProps } from './Node';
 
-export interface INodeListGetters<T> {
+export interface INodeListGetters {
   register: (key?: Key, width?: number) => void;
-  render: (item: T) => ReactElement;
 }
 
-export interface INodeListProps<T> extends INodeListGetters<T> {
-  component?: IComponentType;
+export interface INodeListProps<T> extends INodeListGetters {
+  component: ForwardRefExoticComponent<T>;
   count?: number;
   nodes: [Key, T][];
 }
 
-function NodeList<T>({ nodes, count = 0, component, ...callbacks }: INodeListProps<T>): ReactElement {
-  const renderCallback = useCallback(callbacks.render, [callbacks.render]);
-
+function NodeList<T extends INodeExtendProps>({
+  nodes,
+  count = 0,
+  component,
+  ...callbacks
+}: INodeListProps<T>): ReactElement {
   return (
     <>
       {nodes.map(([id, node], index) => (
-        <Node<T>
+        <Node
+          component={component}
           display={index <= count}
           id={id}
-          node={node}
           key={id}
           order={index}
+          properties={node}
           register={callbacks.register}
-          render={renderCallback}
-          component={component}
         />
       ))}
     </>

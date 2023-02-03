@@ -1,38 +1,40 @@
 import clsx from 'clsx';
-import { HTMLAttributes, Key, ReactElement, useLayoutEffect, useMemo, useState } from 'react';
+import {
+    ForwardRefExoticComponent, HTMLAttributes, Key, ReactElement, useLayoutEffect, useMemo, useState,
+} from 'react';
 
-import { IComponentType } from '../../../types/component';
 import ResizeObserver from '../ResizeObserver';
-import Node from './parts/Node';
+import Node, { INodeExtendProps } from './parts/Node';
 import NodeList from './parts/NodeList';
+import Rest from './parts/Rest';
 import styles from './style.module.scss';
 
 export interface IOverflowEvents {
   onVisibleNodesChange?: (count: number) => void;
 }
 
-export interface IOverflowCallbacks<T> {
-  render: (item: T) => ReactElement;
+export interface IOverflowNodeOptions<T> {
+  component: ForwardRefExoticComponent<T>;
+  /** @default id */
+  field?: keyof Omit<T, 'ref'>;
+  /** @default 10 */
+  width?: number;
 }
 
-export interface IOverflowProps<T, E> extends HTMLAttributes<E>, IOverflowEvents, IOverflowCallbacks<T> {
-  /** @default div */
-  component?: IComponentType;
-  nodes: T[];
-  options?: {
-    /** @default div */
-    component?: IComponentType;
-    /** @default id */
-    field?: keyof T;
-    /** @default 10 */
-    width?: number;
-  };
+export interface IOverflowOptions<T> {
+  node: IOverflowNodeOptions<T>;
 }
 
-function Overflow<T, E = unknown>({
-  component: Component = 'div',
+export interface IOverflowProps<T, E> extends HTMLAttributes<E>, IOverflowEvents {
+  component: keyof React.ReactHTML;
+  nodes: Omit<T, 'ref'>[];
+  options: IOverflowOptions<T>;
+}
+
+function Overflow<T extends INodeExtendProps, E = unknown>({
+  component: Component,
   nodes,
-  render,
+  options,
   ...props
 }: IOverflowProps<T, E>): ReactElement {
   const [containerWidth, setContainerWidth] = useState<number>();
@@ -41,26 +43,25 @@ function Overflow<T, E = unknown>({
   const [restWidth, setRestWidth] = useState(0);
   const [displayCount, setDisplayCount] = useState<number>();
   const [restReady, setRestReady] = useState(false);
-  const options: Required<typeof props.options> = {
-    component: 'div',
-    field: 'id' as keyof T,
+  const node: Required<IOverflowNodeOptions<T>> = {
+    field: 'id' as keyof Omit<T, 'ref'>,
     width: 10,
-    ...props.options,
+    ...options.node,
   };
 
   const mergedNodes = useMemo((): [Key, T][] => {
-    const list = nodes.length ? nodes.slice(0, Math.min(nodes.length, (containerWidth ?? 0) / options.width)) : nodes;
+    const list = nodes.length ? nodes.slice(0, Math.min(nodes.length, (containerWidth ?? 0) / node.width)) : nodes;
 
-    return list.map((node, index) => [((options && node[options.field]) ?? index) as Key, node]);
-  }, [nodes, options.field, options.width, containerWidth]);
+    return list.map((item, index) => [(item[node.field] ?? index) as Key, item as T]);
+  }, [nodes, node.field, node.width, containerWidth]);
 
   const omittedNodes = useMemo(
     () => (nodes.length ? nodes.slice((displayCount ?? 0) + 1) : nodes.slice(mergedNodes.length)),
     [nodes, mergedNodes, displayCount]
   );
 
-  const resizeHandler = (_: unknown, element: HTMLElement): void => {
-    setContainerWidth(element.clientWidth);
+  const resizeHandler = (size: { width: number }): void => {
+    setContainerWidth(size.width);
   };
 
   const registerRestHandler = (_: unknown, width?: number): void => {
@@ -140,25 +141,23 @@ function Overflow<T, E = unknown>({
 
   return (
     <ResizeObserver onResize={resizeHandler}>
-      {
+      <div className={styles.wrapper}>
         <Component className={clsx(props.className, styles.container)} style={props.style}>
           <NodeList
             nodes={mergedNodes}
-            render={render}
             count={displayCount}
             register={registerNodeHandler}
-            component={options.component}
-          />
-          <Node
-            node="..."
-            order={(displayCount ?? 0) + 1}
-            register={registerRestHandler}
-            display={restReady && !!omittedNodes.length}
-            render={node => <div>{node}</div>}
-            component={options.component}
+            component={node.component}
           />
         </Component>
-      }
+        <Node
+          component={Rest}
+          order={(displayCount ?? 0) + 1}
+          register={registerRestHandler}
+          display={restReady && !!omittedNodes.length}
+          properties={{}}
+        />
+      </div>
     </ResizeObserver>
   );
 }

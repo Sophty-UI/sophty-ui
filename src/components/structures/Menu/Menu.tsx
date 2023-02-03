@@ -36,14 +36,13 @@ const Menu = ({
   );
 
   return (
-    <ul {...props} className={clsx(className, styles.menu, styles[mode])}>
-      <OverflowObserver
-        nodes={items}
-        render={(item: Omit<IMenuItemProps, 'onClick' | 'selected'>) => (
-          <MenuItem {...item} selected={selected === item.id} onClick={handleClick} />
-        )}
-      />
-    </ul>
+    <OverflowObserver<IMenuItemProps, HTMLUListElement>
+      {...props}
+      component="ul"
+      className={clsx(className, styles.menu, styles[mode])}
+      nodes={items.map(item => ({ ...item, selected: selected === item.id, onClick: handleClick }))}
+      options={{ node: { component: MenuItem } }}
+    />
   );
 };
 

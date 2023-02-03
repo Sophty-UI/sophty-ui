@@ -1,29 +1,33 @@
 import clsx from 'clsx';
-import { Key, ReactElement, useEffect } from 'react';
+import { CSSProperties, ForwardRefExoticComponent, Key, ReactElement, useEffect } from 'react';
 
-import { IComponentType } from '../../../../types/component';
 import ResizeObserver from '../../ResizeObserver';
 import styles from '../style.module.scss';
 
-export interface INodeCallbacks<T> {
+export interface INodeCallbacks {
   register: (key?: Key, width?: number) => void;
-  render: (item: T) => ReactElement;
 }
 
-export interface INodeProps<T> extends INodeCallbacks<T> {
-  component?: IComponentType;
+export interface INodeProps<T> extends INodeCallbacks {
+  component: ForwardRefExoticComponent<T>;
   display: boolean;
   id?: Key;
-  node: T;
   order: number;
+  properties: T;
 }
 
-function Node<T>({
-  node,
+export interface INodeExtendProps {
+  'aria-hidden'?: boolean | 'true' | 'false';
+  className?: string;
+  style?: CSSProperties | undefined;
+}
+
+function Node<T extends INodeExtendProps>({
+  properties,
   id,
   order,
   display,
-  component: Component = 'div',
+  component: Component,
   ...callbacks
 }: INodeProps<T>): ReactElement {
   useEffect(() => () => callbacks.register(id), []);
@@ -31,12 +35,11 @@ function Node<T>({
   return (
     <ResizeObserver onResize={({ offsetWidth }) => callbacks.register(id, offsetWidth)}>
       <Component
+        {...properties}
         className={clsx(styles.node, !display && styles.hidden)}
         style={display ? { order } : undefined}
         aria-hidden={display ? undefined : true}
-      >
-        {callbacks.render(node)}
-      </Component>
+      />
     </ResizeObserver>
   );
 }

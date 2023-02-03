@@ -4,8 +4,8 @@
   margin: 0;
   padding: 0;
   padding-inline-start: 0;
-  line-height: 48px;
   width: 100%;
+  overflow: hidden;
 }
 
 .vertical {
@@ -14,5 +14,8 @@
 
 .horizontal {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: flex-end;
+  line-height: 48px;
+  height: 48px;
 }
