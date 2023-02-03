@@ -13,13 +13,13 @@ export interface INodeProps<T> extends INodeCallbacks {
   display: boolean;
   id?: Key;
   order: number;
-  properties: T;
+  properties?: T;
 }
 
 export interface INodeExtendProps {
   'aria-hidden'?: boolean | 'true' | 'false';
   className?: string;
-  style?: CSSProperties | undefined;
+  style?: CSSProperties;
 }
 
 function Node<T extends INodeExtendProps>({
@@ -35,7 +35,7 @@ function Node<T extends INodeExtendProps>({
   return (
     <ResizeObserver onResize={({ offsetWidth }) => callbacks.register(id, offsetWidth)}>
       <Component
-        {...properties}
+        {...(properties ?? ({} as T))}
         className={clsx(styles.node, !display && styles.hidden)}
         style={display ? { order } : undefined}
         aria-hidden={display ? undefined : true}

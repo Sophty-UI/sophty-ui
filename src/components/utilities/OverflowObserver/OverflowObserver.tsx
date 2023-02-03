@@ -155,7 +155,6 @@ function Overflow<T extends INodeExtendProps, E = unknown>({
           order={(displayCount ?? 0) + 1}
           register={registerRestHandler}
           display={restReady && !!omittedNodes.length}
-          properties={{}}
         />
       </div>
     </ResizeObserver>

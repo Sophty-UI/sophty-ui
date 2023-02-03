@@ -36,7 +36,7 @@ const Menu = ({
   );
 
   return (
-    <OverflowObserver<IMenuItemProps, HTMLUListElement>
+    <OverflowObserver
       {...props}
       component="ul"
       className={clsx(className, styles.menu, styles[mode])}
