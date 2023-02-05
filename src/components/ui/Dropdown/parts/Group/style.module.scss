@@ -1,0 +1,25 @@
+@import '../../../../../theme/variables/spacing';
+@import '../../../../../theme/variables/colors';
+@import '../../../../../theme/variables/font';
+@import '../../../../../theme/variables/structure';
+
+.group {
+  user-select: none;
+}
+
+.title {
+  padding: $dropdown-item-padding;
+  color: $disable-color;
+  // opacity: 0.45;
+  transition: all 0.2s;
+  display: block;
+  cursor: text;
+  font-size: $font-size-base;
+  line-height: $line-height;
+}
+
+.body {
+  margin: 0 $spacing-2;
+  padding: 0;
+  list-style: none;
+}

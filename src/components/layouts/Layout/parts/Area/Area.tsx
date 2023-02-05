@@ -1,7 +1,7 @@
 import { Key, ReactElement } from 'react';
 
-import { IBoxProps } from '../../../../types/box';
-import { ITrackBreadth } from '../../../../types/css';
+import { IBoxProps } from '../../../../../types/box';
+import { ITrackBreadth } from '../../../../../types/css';
 
 export interface IAreaProps extends IBoxProps {
   area?: Key;

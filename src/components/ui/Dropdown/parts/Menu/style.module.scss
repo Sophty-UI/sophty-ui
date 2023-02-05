@@ -1,0 +1,28 @@
+@import '../../../../../theme/variables/spacing';
+@import '../../../../../theme/variables/colors';
+@import '../../../../../theme/variables/shadows';
+@import '../../../../../theme/variables/structure';
+
+.container {
+  background-color: $background-color-base;
+  border-radius: $border-radius-large;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-2;
+  list-style: none;
+  margin-top: $spacing-1;
+  max-height: $menu-height;
+  overflow-y: auto;
+  padding: $spacing-1;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: $menu-z-index;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.menu {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}

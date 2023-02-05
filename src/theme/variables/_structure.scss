@@ -1,1 +1,12 @@
+@import './spacing';
+
+$border-radius-small: $spacing-1 / 2 !default;
+$border-radius-base: $spacing-1 !default;
+$border-radius-large: $spacing-2 !default;
+
 $header-height: 64px !default;
+
+$menu-height: 256px !default;
+$menu-z-index: 1000 !default;
+
+$dropdown-item-padding: $spacing-1 $spacing-2;

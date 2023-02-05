@@ -1,25 +1,22 @@
+@import '../../../../../theme/variables/spacing';
 @import '../../../../../theme/variables/colors';
+@import '../../../../../theme/variables/font';
 
 .item {
-  padding-inline: 16px;
+  padding-inline: $spacing-3;
   color: $base-color;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
   user-select: none;
 
-  &:hover {
-    color: $primary-color;
-    opacity: 0.9;
-  }
-
+  &:hover,
   &.selected {
     color: $primary-color;
   }
 
   &.disabled {
     color: $disable-color;
-    opacity: 0.3;
     cursor: not-allowed;
   }
 }

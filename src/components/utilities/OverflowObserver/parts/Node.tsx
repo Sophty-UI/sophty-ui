@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import { CSSProperties, ForwardRefExoticComponent, Key, ReactElement, useEffect } from 'react';
+import { ForwardRefExoticComponent, Key, ReactElement, useEffect } from 'react';
 
 import ResizeObserver from '../../ResizeObserver';
 import styles from '../style.module.scss';
+import { IOverflowNodeProps } from '../types/node';
 
 export interface INodeCallbacks {
   register: (key?: Key, width?: number) => void;
@@ -16,20 +17,14 @@ export interface INodeProps<T> extends INodeCallbacks {
   properties?: T;
 }
 
-export interface INodeExtendProps {
-  'aria-hidden'?: boolean | 'true' | 'false';
-  className?: string;
-  style?: CSSProperties;
-}
-
-function Node<T extends INodeExtendProps>({
+const Node = <T extends IOverflowNodeProps>({
   properties,
   id,
   order,
   display,
   component: Component,
   ...callbacks
-}: INodeProps<T>): ReactElement {
+}: INodeProps<T>): ReactElement => {
   useEffect(() => () => callbacks.register(id), []);
 
   return (
@@ -38,10 +33,10 @@ function Node<T extends INodeExtendProps>({
         {...(properties ?? ({} as T))}
         className={clsx(styles.node, !display && styles.hidden)}
         style={display ? { order } : undefined}
-        aria-hidden={display ? undefined : true}
+        aria-hidden={display ? undefined : 'true'}
       />
     </ResizeObserver>
   );
-}
+};
 
 export default Node;

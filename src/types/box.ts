@@ -2,4 +2,4 @@ import { ButtonHTMLAttributes, DetailedHTMLProps, HTMLAttributes, ReactNode } fr
 
 export type IDetailedProps<T> = DetailedHTMLProps<HTMLAttributes<T>, T>;
 export type IDetailedButtonProps<T = HTMLButtonElement> = DetailedHTMLProps<ButtonHTMLAttributes<T>, T>;
-export type IBoxProps<T = ReactNode> = IDetailedProps<HTMLDivElement> & { children: T | T[] };
+export type IBoxProps<T = ReactNode, E = HTMLDivElement> = IDetailedProps<E> & { children: T | T[] };

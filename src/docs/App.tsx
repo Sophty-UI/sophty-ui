@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react';
 
 import { Col, Grid, Layout, Row } from '../components/layouts';
 import { Header } from '../components/structures';
-import { Logo } from '../components/ui';
+import { Dropdown, Logo } from '../components/ui';
 import { ResizeObserver } from '../components/utilities';
 import OverflowObserver from '../components/utilities/OverflowObserver/OverflowObserver';
 import logo from './public/images/logo.svg';
@@ -152,6 +152,154 @@ const App = (): ReactElement => {
         <div style={{ backgroundColor: 'lightblue' }}>nav</div>
       </Layout.Area>
       <Layout.Area key="main" height="1fr" semantic="main">
+        <div
+          style={{
+            padding: 20,
+            width: 400,
+            height: 300,
+          }}
+        >
+          <div style={{ padding: 12 }}>
+            <Dropdown onChange={value => console.log(value)} placeholder="placeholder text" disabled>
+              <Dropdown.Option value="1">1</Dropdown.Option>
+              <Dropdown.Option value="2">2</Dropdown.Option>
+              <Dropdown.Group title="3">
+                <Dropdown.Option value="3.1">3.1</Dropdown.Option>
+                <Dropdown.Option value="3.2">3.2</Dropdown.Option>
+                <Dropdown.Option value="3.3">3.3</Dropdown.Option>
+                <Dropdown.Option value="3.4">3.4</Dropdown.Option>
+              </Dropdown.Group>
+
+              <Dropdown.Option value="4">4</Dropdown.Option>
+            </Dropdown>
+          </div>
+
+          <div style={{ padding: 12 }}>
+            <Dropdown onChange={value => console.log(value)} allowClear>
+              <Dropdown.Option key="1" value="1">
+                1 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="2" value="2">
+                2 menu item
+              </Dropdown.Option>
+
+              <Dropdown.Group key="g1" title="Group 1">
+                <Dropdown.Option key="g1.1" value="g1.1">
+                  1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g1.2" value="g1.2">
+                  2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g1.3" value="g1.3" disabled>
+                  3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g1.4" value="g1.4" disabled>
+                  4 menu item
+                </Dropdown.Option>
+              </Dropdown.Group>
+
+              <Dropdown.Group key="g2" title="Group 2" disabled>
+                <Dropdown.Option key="g2.1" value="g2.1">
+                  1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g2.2" value="g2.2">
+                  2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g2.3" value="g2.3">
+                  3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g2.4" value="g2.4">
+                  4 menu item
+                </Dropdown.Option>
+
+                <Dropdown.Group key="g2.0.1" title="Group 2.5">
+                  <Dropdown.Option key="g2.1.1" value="g2.1.1">
+                    1 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="g2.2.1" value="g2.2.1">
+                    2 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="g2.3.1" value="g2.3.1">
+                    3 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="g2.4.1" value="g2.4.1">
+                    4 menu item
+                  </Dropdown.Option>
+                </Dropdown.Group>
+              </Dropdown.Group>
+
+              <Dropdown.Option key="4" value="4">
+                4 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="5" value="5">
+                Extra large menu item text with super duper mega large description
+              </Dropdown.Option>
+            </Dropdown>
+          </div>
+
+          <div style={{ padding: 12 }}>
+            <Dropdown onChange={value => console.log(value)} type="menu" loading>
+              <Dropdown.Option key="1" value="1">
+                1 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="2" value="2">
+                2 menu item
+              </Dropdown.Option>
+
+              <Dropdown.Group key="g1" title="Group 1">
+                <Dropdown.Option key="g1.1" value="g1.1">
+                  1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g1.2" value="g1.2">
+                  2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g1.3" value="g1.3" disabled>
+                  3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g1.4" value="g1.4" disabled>
+                  4 menu item
+                </Dropdown.Option>
+              </Dropdown.Group>
+
+              <Dropdown.Group key="g2" title="Group 2" disabled>
+                <Dropdown.Option key="g2.1" value="g2.1">
+                  1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g2.2" value="g2.2">
+                  2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g2.3" value="g2.3">
+                  3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="g2.4" value="g2.4">
+                  4 menu item
+                </Dropdown.Option>
+
+                <Dropdown.Group key="g2.0.1" title="Group 2.5">
+                  <Dropdown.Option key="g2.1.1" value="g2.1.1">
+                    1 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="g2.2.1" value="g2.2.1">
+                    2 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="g2.3.1" value="g2.3.1">
+                    3 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="g2.4.1" value="g2.4.1">
+                    4 menu item
+                  </Dropdown.Option>
+                </Dropdown.Group>
+              </Dropdown.Group>
+
+              <Dropdown.Option key="4" value="4">
+                4 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="5" value="5">
+                Extra large menu item text with super duper mega large description
+              </Dropdown.Option>
+            </Dropdown>
+          </div>
+        </div>
         <div style={{ backgroundColor: 'yellow' }}>
           <Row gap={[8, 8]} align="center" justify="center">
             <Col flex={4} style={{ backgroundColor: '#1677ffbf', padding: 8, color: 'white' }}>

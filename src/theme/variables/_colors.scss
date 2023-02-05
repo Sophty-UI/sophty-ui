@@ -133,8 +133,11 @@ $rose: palette((#fff1f2, #ffe4e6, #fecdd3, #fda4af, #fb7185, #f43f5e, #e11d48, #
 
 $title-color: neutral(800) !default;
 $base-color: neutral(800) !default;
-$primary-color: #ff017b !default;
-$secondary-color: #fff !default;
-$disable-color: neutral(800) !default;
+$primary-color: blue(500) !default;
+$secondary-color: $white !default;
+$disable-color: rgba(0, 0, 0, 0.35) !default;
 
 $border-color: gray(200) !default;
+$background-color-base: $white !default;
+$background-color-neutral: rgba(0, 0, 0, 0.04) !default;
+$background-color-primary: blue(100) !default;

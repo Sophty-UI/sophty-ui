@@ -4,10 +4,11 @@ import {
 } from 'react';
 
 import ResizeObserver from '../ResizeObserver';
-import Node, { INodeExtendProps } from './parts/Node';
+import Node from './parts/Node';
 import NodeList from './parts/NodeList';
 import Rest from './parts/Rest';
 import styles from './style.module.scss';
+import { IOverflowNodeProps } from './types/node';
 
 export interface IOverflowEvents {
   onVisibleNodesChange?: (count: number) => void;
@@ -31,12 +32,12 @@ export interface IOverflowProps<T, E> extends HTMLAttributes<E>, IOverflowEvents
   options: IOverflowOptions<T>;
 }
 
-function Overflow<T extends INodeExtendProps, E = unknown>({
+const Overflow = <T extends IOverflowNodeProps, E = unknown>({
   component: Component,
   nodes,
   options,
   ...props
-}: IOverflowProps<T, E>): ReactElement {
+}: IOverflowProps<T, E>): ReactElement => {
   const [containerWidth, setContainerWidth] = useState<number>();
   const [nodesWidths, setNodesWidths] = useState(new Map<Key, number>());
   const [prevRestWidth, setPrevRestWidth] = useState(0);
@@ -60,17 +61,17 @@ function Overflow<T extends INodeExtendProps, E = unknown>({
     [nodes, mergedNodes, displayCount]
   );
 
-  const resizeHandler = (size: { width: number }): void => {
+  const handleResize = (size: { width: number }): void => {
     setContainerWidth(size.width);
   };
 
-  const registerRestHandler = (_: unknown, width?: number): void => {
+  const handleRestRegister = (_: unknown, width?: number): void => {
     if (width) setRestWidth(width);
 
     setPrevRestWidth(restWidth);
   };
 
-  const registerNodeHandler = (key?: React.Key, width?: number): void => {
+  const handleNodeRegister = (key?: React.Key, width?: number): void => {
     setNodesWidths(origin => {
       const clone = new Map(origin);
 
@@ -140,25 +141,20 @@ function Overflow<T extends INodeExtendProps, E = unknown>({
   }, [containerWidth, nodesWidths, restWidth, mergedNodes]);
 
   return (
-    <ResizeObserver onResize={resizeHandler}>
+    <ResizeObserver onResize={handleResize}>
       <div className={styles.wrapper}>
         <Component className={clsx(props.className, styles.container)} style={props.style}>
-          <NodeList
-            nodes={mergedNodes}
-            count={displayCount}
-            register={registerNodeHandler}
-            component={node.component}
-          />
+          <NodeList nodes={mergedNodes} count={displayCount} register={handleNodeRegister} component={node.component} />
         </Component>
         <Node
           component={Rest}
           order={(displayCount ?? 0) + 1}
-          register={registerRestHandler}
+          register={handleRestRegister}
           display={restReady && !!omittedNodes.length}
         />
       </div>
     </ResizeObserver>
   );
-}
+};
 
 export default Overflow;

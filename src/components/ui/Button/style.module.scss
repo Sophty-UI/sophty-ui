@@ -1,4 +1,5 @@
 @import '../../../theme/variables/colors';
+@import '../../../theme/variables/font';
 
 // color types: primary, secondary, success, danger, warning, info, light, dark, link
 // style types: primary, default, dashed, link, text
@@ -9,7 +10,7 @@
   color: gray(900);
   background-color: red;
   border-color: green;
-  font-size: 16px;
+  font-size: $font-size-base;
 
   &_danger {
     color: red;

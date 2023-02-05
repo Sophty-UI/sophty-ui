@@ -1,0 +1,30 @@
+@import '../../../theme/variables/font';
+@import '../../../theme/variables/colors';
+@import '../../../theme/variables/spacing';
+
+.container {
+  width: 100%;
+  height: 100%;
+  margin-inline: $spacing-2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  // -------------
+  // TODO: Icon styles (remove after add empty icon)
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  // -------------
+
+  margin: $spacing-2;
+}
+
+.description {
+  color: $disable-color;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
+  user-select: none;
+}

@@ -1,0 +1,96 @@
+@import '../../../theme/variables/colors';
+@import '../../../theme/variables/structure';
+@import '../../../theme/variables/spacing';
+@import '../../../theme/variables/shadows';
+
+.dropdown {
+  position: relative;
+
+  &.dropdown {
+    &-open {
+      .placeholder,
+      .label {
+        color: $disable-color;
+      }
+
+      .control {
+        border-color: $primary-color;
+        box-shadow: $shadow-3;
+      }
+    }
+
+    &-menu {
+      width: fit-content;
+
+      .control {
+        width: fit-content;
+        padding-left: 0;
+      }
+    }
+
+    &-select {
+      width: 100%;
+
+      .control {
+        width: 100%;
+        padding-left: $spacing-3;
+      }
+    }
+
+    &-loading {
+      .icon {
+        // FIXME: change icon color to $disable-color
+        color: $disable-color;
+        fill: $disable-color;
+      }
+    }
+  }
+}
+
+.control {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  background-color: $white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-base;
+  color: $base-color;
+  cursor: default;
+  outline: none;
+  transition: all 200ms ease;
+}
+
+.disabled {
+  user-select: none;
+  cursor: not-allowed;
+
+  .placeholder,
+  .label,
+  .arrow {
+    color: $disable-color;
+  }
+}
+
+.label,
+.placeholder {
+  display: inline-block;
+  line-height: 32px;
+  height: 32px;
+  text-align: start;
+  width: calc(100% - 32px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

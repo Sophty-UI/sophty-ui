@@ -1,15 +1,11 @@
 import { ForwardedRef, forwardRef, ReactElement } from 'react';
 
-import { INodeExtendProps } from './Node';
+import { IOverflowNodeProps } from '../types/node';
 
-export interface IRestProps extends INodeExtendProps {}
+const Rest = ({ ...props }: IOverflowNodeProps, ref: ForwardedRef<HTMLDivElement>): ReactElement => (
+  <div {...props} ref={ref}>
+    ...
+  </div>
+);
 
-function Rest({ ...props }: IRestProps, ref: ForwardedRef<HTMLDivElement>): ReactElement {
-  return (
-    <div {...props} ref={ref}>
-      ...2222
-    </div>
-  );
-}
-
-export default forwardRef<HTMLDivElement, IRestProps>(Rest);
+export default forwardRef<HTMLDivElement, IOverflowNodeProps>(Rest);

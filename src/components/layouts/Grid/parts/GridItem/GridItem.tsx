@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
-import { IBoxProps } from '../../../../types/box';
-import { IFlexSpan } from '../../../../types/flex';
+import { IBoxProps } from '../../../../../types/box';
+import { IFlexSpan } from '../../../../../types/flex';
 
 export interface IGridItemProps extends IBoxProps {
   columnEnd?: number;
