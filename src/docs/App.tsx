@@ -1,3 +1,4 @@
+import logo from '/images/logo.svg';
 import { ReactElement, useEffect, useState } from 'react';
 
 import { Col, Grid, Layout, Row } from '../components/layouts';
@@ -5,7 +6,6 @@ import { Header } from '../components/structures';
 import { Dropdown, Logo } from '../components/ui';
 import { ResizeObserver } from '../components/utilities';
 import OverflowObserver from '../components/utilities/OverflowObserver/OverflowObserver';
-import logo from './public/images/logo.svg';
 
 import '../theme/assets/preflight.css';
 import '@sophty-ui/icons/theme.css';
@@ -160,7 +160,7 @@ const App = (): ReactElement => {
           }}
         >
           <div style={{ padding: 12 }}>
-            <Dropdown onChange={value => console.log(value)} placeholder="placeholder text" disabled>
+            <Dropdown onChange={value => console.log(value)} placeholder="placeholder text" disabled loading>
               <Dropdown.Option value="1">1</Dropdown.Option>
               <Dropdown.Option value="2">2</Dropdown.Option>
               <Dropdown.Group title="3">
@@ -175,7 +175,7 @@ const App = (): ReactElement => {
           </div>
 
           <div style={{ padding: 12 }}>
-            <Dropdown onChange={value => console.log(value)} allowClear>
+            <Dropdown onChange={value => console.log(value)} placeholder="placeholder text" allowClear>
               <Dropdown.Option key="1" value="1">
                 1 menu item
               </Dropdown.Option>
@@ -238,7 +238,7 @@ const App = (): ReactElement => {
           </div>
 
           <div style={{ padding: 12 }}>
-            <Dropdown onChange={value => console.log(value)} type="menu" loading>
+            <Dropdown onChange={value => console.log(value)} type="menu" openIcon={'...'} closeIcon={'...'}>
               <Dropdown.Option key="1" value="1">
                 1 menu item
               </Dropdown.Option>

@@ -5,10 +5,10 @@
 
 .dropdown {
   position: relative;
+  cursor: pointer;
 
   &.dropdown {
     &-open {
-      .placeholder,
       .label {
         color: $disable-color;
       }
@@ -37,11 +37,12 @@
       }
     }
 
-    &-loading {
-      .icon {
-        // FIXME: change icon color to $disable-color
+    &-disabled {
+      user-select: none;
+      cursor: not-allowed;
+
+      .label {
         color: $disable-color;
-        fill: $disable-color;
       }
     }
   }
@@ -57,40 +58,23 @@
   border: 1px solid $border-color;
   border-radius: $border-radius-base;
   color: $base-color;
-  cursor: default;
   outline: none;
   transition: all 200ms ease;
-}
-
-.disabled {
-  user-select: none;
-  cursor: not-allowed;
-
-  .placeholder,
-  .label,
-  .arrow {
-    color: $disable-color;
-  }
-}
-
-.label,
-.placeholder {
-  display: inline-block;
+  height: 34px;
+  min-width: 34px;
   line-height: 32px;
-  height: 32px;
+}
+
+.label {
+  display: inline-block;
+  height: 100%;
   text-align: start;
-  width: calc(100% - 32px);
+  width: calc(100% - ($icon-size + $spacing-2));
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  cursor: pointer;
-}
 
-.icon {
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  &.placeholder {
+    color: $disable-color;
+  }
 }

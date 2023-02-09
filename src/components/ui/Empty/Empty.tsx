@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { ReactElement } from 'react';
 
 import styles from './style.module.scss';
 
@@ -8,7 +7,7 @@ export interface IEmptyProps {
 }
 
 // TODO: add Icon
-const Empty = ({ className }: IEmptyProps): ReactElement => (
+const Empty = ({ className }: IEmptyProps) => (
   <div className={clsx(className, styles.container)}>
     <div className={styles.icon}></div>
     <span className={styles.description}></span>

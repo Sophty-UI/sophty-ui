@@ -1,2 +1,2 @@
-export { default } from './MenuItem';
-export type { IMenuItemProps } from './MenuItem';
+export { default } from './Item';
+export type { IItemProps, IItemEvents } from './Item';

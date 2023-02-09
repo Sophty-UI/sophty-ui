@@ -1,43 +1,47 @@
-import { LoadingIcon } from '@sophty-ui/icons';
 import clsx from 'clsx';
-import { createRef, MouseEvent, ReactElement, ReactNode, TouchEvent, useEffect, useState } from 'react';
+import { createRef, MouseEvent, ReactElement, ReactNode, TouchEvent, useCallback, useEffect, useState } from 'react';
 
-import Arrow from './parts/Arrow';
-import Clear from './parts/Clear';
+import { DropdownProvider } from './contexts/DropdownContext';
+import Icon from './parts/Icon';
 import Menu, { IMenuProps } from './parts/Menu';
-import { IOptionsEvents } from './parts/Option';
+import { IOptionProps } from './parts/Option';
 import styles from './style.module.scss';
+import { IDropdownChangeEvent } from './types/events';
 
-export interface IDropdownEvents extends IOptionsEvents {
+export interface IDropdownEvents {
   onFocus?: (focus: boolean) => void;
+  onChange?: IDropdownChangeEvent;
 }
 
-export interface IDropdownProps extends Omit<IMenuProps, keyof IDropdownEvents>, IDropdownEvents {
+export interface IDropdownProps extends Omit<IMenuProps, keyof IDropdownEvents | 'children'>, IDropdownEvents {
   allowClear?: boolean;
   closeAfterChange?: boolean;
-  closeArrow?: ReactNode;
+  closeIcon?: ReactNode;
   defaultValue?: string;
   disabled?: boolean;
   loading?: boolean;
-  openArrow?: ReactNode;
+  openIcon?: ReactNode;
   placeholder?: string;
   type?: 'select' | 'menu';
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  children?: ReactElement<IOptionProps> | Array<ReactElement<IOptionProps>>;
 }
 
 const Dropdown = ({
   allowClear,
   children,
   className,
-  closeArrow,
+  closeIcon,
   defaultValue,
   disabled,
   loading,
-  openArrow,
+  openIcon,
   type = 'select',
   placeholder = '',
   closeAfterChange = true,
   ...events
-}: IDropdownProps): ReactElement => {
+}: IDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | undefined>();
@@ -74,23 +78,34 @@ const Dropdown = ({
     }
   };
 
-  const handleChange = (
-    value: string,
-    label: string,
-    event: MouseEvent<HTMLLIElement> | TouchEvent<HTMLLIElement>
-  ): void => {
-    if (value !== selectedValue) {
-      setSelectedValue(value);
-      setSelectedLabel(label);
+  const handleChange = useCallback(
+    (value: string, label: string, event: MouseEvent<HTMLLIElement> | TouchEvent<HTMLLIElement>): void => {
+      if (value !== selectedValue) {
+        setSelectedValue(value);
+        setSelectedLabel(label);
+        setIsHovered(state => !state);
 
-      events.onChange?.(value, label, event);
+        events.onChange?.(value, label, event);
 
-      if (closeAfterChange) setIsOpen(false);
-    }
+        if (closeAfterChange) setIsOpen(false);
+      }
+    },
+    [events.onChange, closeAfterChange]
+  );
+
+  const handleHover = (): void => {
+    setIsHovered(state => !state);
+
+    if (!isSelect && !disabled) setIsOpen(state => !state);
   };
 
-  const handleMouseEnter = (): void => setIsHovered(true);
-  const handleMouseLeave = (): void => setIsHovered(false);
+  const handleClear = (event: MouseEvent<HTMLElement>): void => {
+    setSelectedValue(undefined);
+    setSelectedLabel(undefined);
+
+    event.stopPropagation();
+    event.preventDefault();
+  };
 
   return (
     <div
@@ -98,35 +113,38 @@ const Dropdown = ({
       className={clsx(
         className,
         styles.dropdown,
+        disabled && styles.dropdownDisabled,
         isOpen && styles.dropdownOpen,
-        isSelect ? styles.dropdownSelect : styles.dropdownMenu,
-        loading && styles.dropdownLoading
+        isSelect ? styles.dropdownSelect : styles.dropdownMenu
       )}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleHover}
+      onMouseLeave={handleHover}
     >
       <div
-        className={clsx(styles.control, disabled && styles.disabled)}
+        className={styles.control}
         onMouseDown={isSelect && allowClear ? handleMouseDown : undefined}
         onTouchEnd={isSelect && allowClear ? handleMouseDown : undefined}
         aria-haspopup="listbox"
       >
         {isSelect && (
-          <span className={clsx(selectedLabel ? styles.label : styles.placeholder)}>
+          <span className={clsx(styles.label, !selectedLabel && styles.placeholder)}>
             {selectedLabel ?? placeholder}
           </span>
         )}
-        <div className={styles.icon}>
-          {loading ? <LoadingIcon spin /> : <Arrow open={isOpen} openArrow={openArrow} closeArrow={closeArrow} />}
-          {
-            // TODO: isSelect && allowClear && isHovered - show Clear else show Arrows
-            // TODO: Icon container to component? with arrows and clear icons?
-            isSelect && allowClear && isHovered && <Clear />
-          }
-        </div>
+        <Icon
+          loading={loading}
+          open={isOpen}
+          clearable={isSelect && allowClear && isHovered && !!selectedValue}
+          disabled={disabled}
+          openIcon={openIcon}
+          closeIcon={closeIcon}
+          onClear={handleClear}
+        />
       </div>
-      <Menu open={isOpen} defaultValue={defaultValue} selectedValue={selectedValue} onChange={handleChange}>
-        {children}
+      <Menu open={isOpen}>
+        <DropdownProvider value={selectedValue} handler={handleChange}>
+          {children}
+        </DropdownProvider>
       </Menu>
     </div>
   );

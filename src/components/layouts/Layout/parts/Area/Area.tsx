@@ -3,8 +3,11 @@ import { Key, ReactElement } from 'react';
 import { IBoxProps } from '../../../../../types/box';
 import { ITrackBreadth } from '../../../../../types/css';
 
+export interface IAreaPrivateProps {
+  _area?: Key;
+}
+
 export interface IAreaProps extends IBoxProps {
-  area?: Key;
   height?: ITrackBreadth | number;
   key: string;
   semantic?: 'div' | 'aside' | 'footer' | 'header' | 'main' | 'nav' | 'section';
@@ -12,14 +15,14 @@ export interface IAreaProps extends IBoxProps {
 }
 
 const Area = ({
-  area,
   height,
   width,
   children,
   style = {},
   semantic = 'div',
+  _area: gridArea,
   ...props
-}: IAreaProps): ReactElement<IAreaProps> => {
+}: IAreaProps & IAreaPrivateProps): ReactElement<IAreaProps> => {
   const Tag = `${semantic}` as typeof semantic;
 
   return (
@@ -27,7 +30,7 @@ const Area = ({
       {...props}
       style={{
         ...style,
-        gridArea: area,
+        gridArea,
         display: 'inline-grid',
         width: typeof width === 'number' ? width : undefined,
         height: typeof height === 'number' ? height : undefined,

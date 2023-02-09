@@ -1,0 +1,26 @@
+@import '../../../../../theme/variables/colors';
+@import '../../../../../theme/variables/structure';
+
+.icon {
+  user-select: none;
+  width: fit-content;
+  height: 100%;
+  font-size: $icon-size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  color: $title-color;
+
+  &.disabled {
+    color: $disable-color;
+  }
+}
+
+.clear {
+  color: $disable-color;
+
+  &:hover {
+    color: $title-color;
+  }
+}

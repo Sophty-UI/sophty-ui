@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MouseEventHandler, ReactElement } from 'react';
+import { MouseEventHandler } from 'react';
 
 import { IBaseProps } from '../../../types/base';
 import styles from './style.module.scss';
@@ -15,7 +15,7 @@ export interface ILogoProps extends IBaseProps, ILogoEvents {
   src?: string;
 }
 
-const Logo = ({ className, alt, href = '/', src, name, ...events }: ILogoProps): ReactElement<ILogoProps> => (
+const Logo = ({ className, alt, href = '/', src, name, ...events }: ILogoProps) => (
   <div className={clsx(className, styles.logo)}>
     <a className={styles.link} href={href} onClick={events.onClick}>
       <img className={styles.image} src={src} alt={alt} />

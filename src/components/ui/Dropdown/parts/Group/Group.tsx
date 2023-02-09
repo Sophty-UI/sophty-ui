@@ -1,39 +1,22 @@
-import { Children, cloneElement, ReactElement, useMemo } from 'react';
-
 import { IBoxProps } from '../../../../../types/box';
-import Option, { IOptionChild, IOptionsEvents } from '../Option';
+import { GroupProvider } from '../../contexts/GroupContext';
 import styles from './style.module.scss';
 
-export interface IGroupProps extends Omit<IBoxProps<IOptionChild>, keyof IOptionsEvents>, IOptionsEvents {
+export interface IGroupProps extends IBoxProps<HTMLLIElement> {
   disabled?: boolean;
-  selectedValue?: string;
   title?: string;
 }
 
-const Group = ({ title, disabled, selectedValue, children, ...events }: IGroupProps): ReactElement | null => {
-  const options = useMemo(
-    () =>
-      Children.map(children, child =>
-        cloneElement(child, {
-          onChange: events.onChange,
-          ...(child.type.name === Option.name
-            ? { disabled: disabled ?? child.props.disabled, selected: child.props.value === selectedValue }
-            : {}),
-        })
-      ),
-    [children, disabled]
-  );
-
-  return options ? (
+const Group = ({ title, disabled, children }: IGroupProps) =>
+  children ? (
     <li className={styles.group} role="presentation" tabIndex={-1}>
       <span role="presentation" title={title} className={styles.title}>
         {title}
       </span>
       <ul className={styles.body} role="group">
-        {options}
+        <GroupProvider disabled={disabled}>{children}</GroupProvider>
       </ul>
     </li>
   ) : null;
-};
 
 export default Group;

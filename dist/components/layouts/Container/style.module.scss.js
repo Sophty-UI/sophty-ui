@@ -1,8 +1,0 @@
-import styleInject from '../../../external/style-inject/dist/style-inject.es.js';
-
-var css_248z = ".style-module_container__-81Z2 {\n  width: 100%;\n  margin-right: auto;\n  margin-left: auto;\n  padding-left: var(--spacing-sm);\n  padding-right: var(--spacing-sm);\n  display: block;\n}\n\n.style-module_small__f8Sl2 {\n  max-width: calc(var(--resolution-sm) - var(--spacing-sm));\n}\n.style-module_small__f8Sl2.style-module_container__-81Z2 {\n  padding-left: var(--spacing-sm);\n  padding-right: var(--spacing-sm);\n}\n\n.style-module_medium__L3TNi {\n  max-width: calc(var(--resolution-md) - var(--spacing-md));\n}\n.style-module_medium__L3TNi.style-module_container__-81Z2 {\n  padding-left: var(--spacing-md);\n  padding-right: var(--spacing-md);\n}\n\n.style-module_large__q5cXb {\n  max-width: calc(var(--resolution-lg) - var(--spacing-lg));\n}\n\n.style-module_extra__om1py {\n  max-width: calc(var(--resolution-xl) - var(--spacing-lg));\n}\n\n.style-module_super__4Akrl {\n  max-width: calc(var(--resolution-sl) - var(--spacing-lg));\n}";
-var styles = {"sm":"640px","md":"768px","lg":"1024px","xl":"1280px","sl":"1536px","container":"style-module_container__-81Z2","small":"style-module_small__f8Sl2","medium":"style-module_medium__L3TNi","large":"style-module_large__q5cXb","extra":"style-module_extra__om1py","super":"style-module_super__4Akrl"};
-styleInject(css_248z);
-
-export { styles as default };
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3R5bGUubW9kdWxlLnNjc3MuanMiLCJzb3VyY2VzIjpbXSwic291cmNlc0NvbnRlbnQiOltdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7OzsifQ==

@@ -1,14 +1,14 @@
 import { ReactElement } from 'react';
 
 import { default as GridBase } from './Grid';
-import { default as GridItem, IGridItemProps } from './parts/GridItem';
+import { default as Item, IItemProps } from './parts/Item';
 
 export type IGridProps = typeof GridBase & {
-  Item: (props: Omit<IGridItemProps, 'columnStart' | 'columnEnd'>) => ReactElement;
+  Item: (props: Omit<IItemProps, 'columnStart' | 'columnEnd'>) => ReactElement;
 };
 
 const Grid = GridBase as IGridProps;
 
-Grid.Item = GridItem;
+Grid.Item = Item;
 
 export default Grid;

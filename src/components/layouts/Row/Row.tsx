@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ForwardedRef, forwardRef, ReactElement, useMemo } from 'react';
+import { ForwardedRef, forwardRef, useMemo } from 'react';
 
 import useResolution from '../../../hooks/useResolution';
 import { IBoxProps } from '../../../types/box';
@@ -7,10 +7,9 @@ import { IFlexWrap } from '../../../types/css';
 import { IFlexAlign, IFlexGap, IFlexJustify } from '../../../types/flex';
 import { Resolution } from '../../../types/resolution';
 import { parseGap } from '../../../utils/flex';
-import { IColProps } from '../Col/Col';
 import styles from './style.module.scss';
 
-export interface IRowProps extends IBoxProps<ReactElement<IColProps> | boolean> {
+export interface IRowProps extends IBoxProps {
   align?: IFlexAlign | { [key in Resolution]?: IFlexAlign };
   direction?: 'row' | 'column';
   /**
@@ -36,18 +35,18 @@ const ALIGN_MAP = {
 
 const Row = (
   {
+    children,
+    style,
+    className,
     gap,
     align,
     justify = 'space-evenly',
-    children,
     direction = 'row',
     wrap = true,
-    style,
-    className,
     ...props
   }: IRowProps,
   ref: ForwardedRef<HTMLDivElement>
-): ReactElement<IRowProps> => {
+) => {
   const resolution = useResolution();
   const flexStyles = useMemo(
     () => ({

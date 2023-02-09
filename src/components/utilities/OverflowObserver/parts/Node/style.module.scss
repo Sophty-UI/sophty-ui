@@ -1,0 +1,11 @@
+.node {
+  opacity: 1;
+
+  &.hidden {
+    opacity: 0;
+    height: 0;
+    overflow-y: hidden;
+    pointer-events: none;
+    position: absolute;
+  }
+}

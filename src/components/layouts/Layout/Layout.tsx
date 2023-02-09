@@ -1,15 +1,16 @@
 import clsx from 'clsx';
-import { Children, cloneElement, ForwardedRef, forwardRef, ReactElement, useMemo } from 'react';
+import { Children, cloneElement, ForwardedRef, forwardRef, isValidElement, ReactElement, useMemo } from 'react';
 
 import { IBoxProps } from '../../../types/box';
 import { ITrackBreadth } from '../../../types/css';
 import { IFlexGap } from '../../../types/flex';
 import { parseGap } from '../../../utils/flex';
-import Area, { IAreaProps } from './parts/Area';
+import { IAreaProps } from './parts/Area';
+import { IAreaPrivateProps } from './parts/Area/Area';
 import styles from './style.module.scss';
 import { grid } from './utils/grid';
 
-export interface ILayoutProps extends IBoxProps<ReactElement<IAreaProps, typeof Area>> {
+export interface ILayoutProps extends IBoxProps {
   /**
    * Sets the gaps (gutters) between rows and columns.
    *
@@ -45,13 +46,15 @@ const Layout = (
 
     return [
       Children.map(children, child => {
+        if (!child || !isValidElement(child)) return undefined;
+
         const { width, height } = child.props;
 
         if (typeof child.key !== 'string') throw new Error('Layout.Area key is required!');
         if (height) rows.set(child.key, typeof height === 'number' ? `${height}px` : height);
         if (width) cols.set(child.key, typeof width === 'number' ? `${width}px` : width);
 
-        return cloneElement(child, { area: child.key });
+        return cloneElement(child as ReactElement<IAreaProps & IAreaPrivateProps>, { _area: child.key });
       }),
       grid({ template, rows, cols }),
     ];

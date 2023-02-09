@@ -1,33 +1,36 @@
 import clsx from 'clsx';
-import { Children, cloneElement, ForwardedRef, forwardRef, ReactElement, useMemo } from 'react';
+import { Children, cloneElement, ForwardedRef, forwardRef, isValidElement, ReactElement, useMemo } from 'react';
 
 import useResolution from '../../../hooks/useResolution';
 import { IBoxProps } from '../../../types/box';
 import { calcSpan } from '../../../utils/flex';
-import { IGridItemProps } from './parts/GridItem';
+import { IItemPrivateProps, IItemProps } from './parts/Item';
 import styles from './style.module.scss';
 
-export interface IGridProps extends IBoxProps<ReactElement<IGridItemProps>> {
+export interface IGridProps extends IBoxProps {
   columns?: number;
 }
 
 // TODO: offset - to push or pull columns
-const Grid = (
-  { children, className, columns = 12, ...props }: IGridProps,
-  ref: ForwardedRef<HTMLDivElement>
-): ReactElement<IGridProps> => {
+const Grid = ({ children, className, columns = 12, ...props }: IGridProps, ref: ForwardedRef<HTMLDivElement>) => {
   const resolution = useResolution();
   const body = useMemo(() => {
-    const columnEnd = columns + 1;
+    const _columnEnd = columns + 1;
     let prevPosition = 1;
 
     return Children.map(children, child => {
-      const columnStart = prevPosition;
+      if (!child || !isValidElement(child)) return undefined;
+
       const span = calcSpan(child.props.span, resolution, columns);
+      const item = cloneElement(child as ReactElement<IItemProps & IItemPrivateProps>, {
+        _columnStart: prevPosition,
+        _columnEnd,
+        span,
+      });
 
-      prevPosition = prevPosition + span >= columnEnd ? 1 : prevPosition + span;
+      prevPosition = prevPosition + span >= _columnEnd ? 1 : prevPosition + span;
 
-      return cloneElement(child, { columnStart, columnEnd, span });
+      return item;
     });
   }, [children, resolution, columns]);
 
