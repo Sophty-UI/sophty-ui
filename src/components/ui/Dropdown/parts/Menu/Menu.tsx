@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { FC } from 'react';
 
 import { IBoxProps } from '../../../../../types/box';
 import Empty from '../../../Empty';
@@ -8,7 +9,7 @@ export interface IMenuProps extends IBoxProps {
   open?: boolean;
 }
 
-const Menu = ({ children, className, open }: IMenuProps) =>
+const Menu: FC<IMenuProps> = ({ children, className, open }) =>
   open ? (
     <div className={clsx(className, styles.container)} aria-expanded="true">
       {children ? (

@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import { IBoxProps } from '../../../../../types/box';
 import { IFlexSpan } from '../../../../../types/flex';
 
@@ -6,11 +8,11 @@ export interface IItemPrivateProps {
   _columnStart?: number;
 }
 
-export interface IItemProps extends IBoxProps {
+export interface IItemProps extends IItemPrivateProps, IBoxProps {
   span?: IFlexSpan;
 }
 
-const Item = ({ children, style, _columnStart, _columnEnd, span, ...props }: IItemProps & IItemPrivateProps) => {
+const Item: FC<IItemProps> = ({ children, style, _columnStart, _columnEnd, span, ...props }) => {
   if (typeof span !== 'number' || typeof _columnStart !== 'number' || typeof _columnEnd !== 'number') {
     throw new Error('Use Grid.Item only inside Grid container');
   }

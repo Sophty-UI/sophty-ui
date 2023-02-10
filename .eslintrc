@@ -33,7 +33,7 @@
       }
     ],
     "@typescript-eslint/func-call-spacing": ["error", "never"],
-    "@typescript-eslint/indent": ["error", 2, { "SwitchCase": 1, "ImportDeclaration": 2 }],
+    "@typescript-eslint/indent": ["error", 2, { "SwitchCase": 1, "ImportDeclaration": 1 }],
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/member-delimiter-style": ["error", { "multiline": { "delimiter": "semi" } }],
     "@typescript-eslint/member-ordering": [

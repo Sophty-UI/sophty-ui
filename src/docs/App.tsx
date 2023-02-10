@@ -1,5 +1,5 @@
 import logo from '/images/logo.svg';
-import { ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Col, Grid, Layout, Row } from '../components/layouts';
 import { Header } from '../components/structures';
@@ -59,8 +59,11 @@ const MENU = [
 ];
 
 interface IItemType {
+  className?: string;
   id: number;
   label: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  style?: any;
   value: string | number;
 }
 
@@ -74,7 +77,7 @@ function createData(count: number): IItemType[] {
   return data;
 }
 
-const renderItem = ({ label, style, className }: IItemType): ReactElement => (
+const renderItem: FC<IItemType> = ({ label, style, className }) => (
   <div
     className={className}
     style={{

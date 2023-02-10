@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ForwardedRef, forwardRef, ReactNode } from 'react';
+import { forwardRef, ForwardRefRenderFunction, ReactNode } from 'react';
 
 import useResolution from '../../../hooks/useResolution';
 import { IDetailedProps } from '../../../types/box';
@@ -19,7 +19,10 @@ const MENU_SPAN = { xs: 12, sm: 12, md: 18, lg: 18, xl: 20, sl: 20 };
 
 // TODO: Mobile side menu
 
-const Header = ({ className, logo, menu, extra, ...props }: IHeaderProps, ref: ForwardedRef<HTMLDivElement>) => {
+const Header: ForwardRefRenderFunction<HTMLDivElement, IHeaderProps> = (
+  { className, logo, menu, extra, ...props },
+  ref
+) => {
   const resolution = useResolution();
   const isMobile = resolution === Resolution.Small || resolution === Resolution.ExtraSmall;
 
@@ -42,4 +45,4 @@ const Header = ({ className, logo, menu, extra, ...props }: IHeaderProps, ref: F
   );
 };
 
-export default forwardRef<HTMLDivElement, IHeaderProps>(Header);
+export default forwardRef(Header);

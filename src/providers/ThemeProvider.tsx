@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import ThemeContext from '../contexts/ThemeContext';
 import useTheme from '../hooks/useTheme';
@@ -9,7 +9,7 @@ export interface IThemeProviderProps {
   theme: Partial<ITheme>;
 }
 
-const ThemeProvider = ({ children, theme: localTheme }: IThemeProviderProps): ReactElement<IThemeProviderProps> => {
+const ThemeProvider: FC<IThemeProviderProps> = ({ children, theme: localTheme }) => {
   const outerTheme = useTheme();
   // TODO: deep merge
   const theme = useMemo(() => ({ ...outerTheme, ...localTheme }), [localTheme, outerTheme]);

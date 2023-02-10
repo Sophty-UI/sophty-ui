@@ -1,11 +1,8 @@
-import { ForwardedRef, forwardRef, ForwardRefRenderFunction } from 'react';
+import { forwardRef, ForwardRefRenderFunction } from 'react';
 
-import { INodeBaseProps } from '../Node';
+import { IBoxProps } from '../../../../../types/box';
 
-const Rest: ForwardRefRenderFunction<HTMLDivElement, INodeBaseProps> = (
-  { ...props }: INodeBaseProps,
-  ref: ForwardedRef<HTMLDivElement>
-) => (
+const Rest: ForwardRefRenderFunction<HTMLDivElement, IBoxProps> = (props, ref) => (
   <div {...props} ref={ref}>
     ...
   </div>

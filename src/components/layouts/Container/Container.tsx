@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ForwardedRef, forwardRef } from 'react';
+import { forwardRef, ForwardRefRenderFunction } from 'react';
 
 import useResolution from '../../../hooks/useResolution';
 import { IBoxProps } from '../../../types/box';
@@ -14,7 +14,7 @@ const MODIFICATIONS: { [key in Resolution]?: string } = {
   [Resolution.Small]: styles.small,
 };
 
-const Container = ({ className, children, ...props }: IBoxProps, ref: ForwardedRef<HTMLDivElement>) => {
+const Container: ForwardRefRenderFunction<HTMLDivElement, IBoxProps> = ({ className, children, ...props }, ref) => {
   const resolution = useResolution();
 
   return (
@@ -24,4 +24,4 @@ const Container = ({ className, children, ...props }: IBoxProps, ref: ForwardedR
   );
 };
 
-export default forwardRef<HTMLDivElement, IBoxProps>(Container);
+export default forwardRef(Container);

@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { IContainerProps } from '../../../../types/box';
 import { IDropdownChangeEvent } from '../types/events';
@@ -7,11 +7,11 @@ export const DropdownChangeContext = createContext<IDropdownChangeEvent | undefi
 export const DropdownSelectedValueContext = createContext<string | undefined>(undefined);
 
 export interface IDropdownProviderProps extends IContainerProps {
-  value?: string;
   handler?: IDropdownChangeEvent;
+  value?: string;
 }
 
-export const DropdownProvider = ({ value, handler, children }: IDropdownProviderProps): ReactElement => (
+export const DropdownProvider: FC<IDropdownProviderProps> = ({ value, handler, children }) => (
   <DropdownSelectedValueContext.Provider value={value}>
     <DropdownChangeContext.Provider value={handler}>{children}</DropdownChangeContext.Provider>
   </DropdownSelectedValueContext.Provider>

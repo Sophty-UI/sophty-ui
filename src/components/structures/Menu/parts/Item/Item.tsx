@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ForwardedRef, forwardRef, MouseEvent, ReactNode } from 'react';
+import { forwardRef, ForwardRefRenderFunction, MouseEvent, ReactNode } from 'react';
 
 import { IDetailedProps } from '../../../../../types/box';
 import styles from './style.module.scss';
@@ -16,9 +16,9 @@ export interface IItemProps extends Omit<IDetailedProps<HTMLLIElement>, keyof II
   selected?: boolean;
 }
 
-const MenuItem = (
-  { className, children, disabled, id, label, onClick, selected, role = 'menu-item', ...props }: IItemProps,
-  ref: ForwardedRef<HTMLLIElement>
+const Item: ForwardRefRenderFunction<HTMLLIElement, IItemProps> = (
+  { className, children, disabled, id, label, onClick, selected, role = 'menu-item', ...props },
+  ref
 ) => {
   const handleClick = (event: MouseEvent<HTMLLIElement>): void => onClick(event, id);
 
@@ -36,4 +36,4 @@ const MenuItem = (
   );
 };
 
-export default forwardRef<HTMLLIElement, IItemProps>(MenuItem);
+export default forwardRef(Item);

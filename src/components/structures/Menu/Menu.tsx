@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MouseEvent, useCallback, useState } from 'react';
+import { FC, MouseEvent, useCallback, useState } from 'react';
 
 import { IDetailedProps } from '../../../types/box';
 import OverflowObserver from '../../utilities/OverflowObserver';
@@ -11,12 +11,12 @@ export interface IMenuEvents {
 }
 
 export interface IMenuProps extends Omit<IDetailedProps<HTMLUListElement>, 'children' | 'onSelect'>, IMenuEvents {
-  items: Omit<IItemProps, 'selected'>[];
+  items: IItemProps[];
   mode?: 'vertical' | 'horizontal';
   selectedId?: string;
 }
 
-const Menu = ({ selectedId, className, items, onSelect, mode = 'horizontal', ...props }: IMenuProps) => {
+const Menu: FC<IMenuProps> = ({ selectedId, className, items, onSelect, mode = 'horizontal', ...props }) => {
   const [selected, setSelected] = useState<string | undefined>(selectedId);
 
   const handleClick = useCallback(
@@ -34,7 +34,7 @@ const Menu = ({ selectedId, className, items, onSelect, mode = 'horizontal', ...
       component="ul"
       className={clsx(className, styles.menu, styles[mode])}
       nodes={items.map(item => ({ ...item, selected: selected === item.id, onClick: handleClick }))}
-      options={{ node: { component: Item } }}
+      options={{ component: Item }}
     />
   );
 };

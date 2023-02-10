@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { IContainerProps } from '../../../../types/box';
 
@@ -8,7 +8,7 @@ export interface IGroupProviderProps extends IContainerProps {
   disabled?: boolean;
 }
 
-export const GroupProvider = ({ disabled, children }: IGroupProviderProps): ReactElement => (
+export const GroupProvider: FC<IGroupProviderProps> = ({ disabled, children }) => (
   <GroupContext.Provider value={disabled}>{children}</GroupContext.Provider>
 );
 

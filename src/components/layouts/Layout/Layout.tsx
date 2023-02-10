@@ -1,12 +1,19 @@
 import clsx from 'clsx';
-import { Children, cloneElement, ForwardedRef, forwardRef, isValidElement, ReactElement, useMemo } from 'react';
+import {
+  Children,
+  cloneElement,
+  forwardRef,
+  ForwardRefRenderFunction,
+  FunctionComponentElement,
+  isValidElement,
+  useMemo,
+} from 'react';
 
 import { IBoxProps } from '../../../types/box';
 import { ITrackBreadth } from '../../../types/css';
 import { IFlexGap } from '../../../types/flex';
 import { parseGap } from '../../../utils/flex';
 import { IAreaProps } from './parts/Area';
-import { IAreaPrivateProps } from './parts/Area/Area';
 import styles from './style.module.scss';
 import { grid } from './utils/grid';
 
@@ -36,10 +43,10 @@ export interface ILayoutProps extends IBoxProps {
   template: string[][];
 }
 
-const Layout = (
-  { className, children, template, style = {}, gap, ...props }: ILayoutProps,
-  ref: ForwardedRef<HTMLDivElement>
-): ReactElement<ILayoutProps> => {
+const Layout: ForwardRefRenderFunction<HTMLDivElement, ILayoutProps> = (
+  { className, children, template, style = {}, gap, ...props },
+  ref
+) => {
   const [body, gridTemplate] = useMemo(() => {
     const rows = new Map<string, ITrackBreadth>();
     const cols = new Map<string, ITrackBreadth>();
@@ -54,7 +61,7 @@ const Layout = (
         if (height) rows.set(child.key, typeof height === 'number' ? `${height}px` : height);
         if (width) cols.set(child.key, typeof width === 'number' ? `${width}px` : width);
 
-        return cloneElement(child as ReactElement<IAreaProps & IAreaPrivateProps>, { _area: child.key });
+        return cloneElement(child as FunctionComponentElement<IAreaProps>, { _area: child.key });
       }),
       grid({ template, rows, cols }),
     ];
@@ -72,4 +79,4 @@ const Layout = (
   );
 };
 
-export default forwardRef<HTMLDivElement, ILayoutProps>(Layout);
+export default forwardRef(Layout);

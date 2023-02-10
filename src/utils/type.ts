@@ -1,3 +1,1 @@
-import { Booleanish } from '../types/base';
-
-export const toBooleanish = (value: boolean): Booleanish => value.toString() as Booleanish;
+export const toBooleanish = (value: boolean): 'true' | 'false' => value.toString() as ReturnType<typeof toBooleanish>;

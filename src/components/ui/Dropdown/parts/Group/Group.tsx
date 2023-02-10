@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import { IBoxProps } from '../../../../../types/box';
 import { GroupProvider } from '../../contexts/GroupContext';
 import styles from './style.module.scss';
@@ -7,7 +9,7 @@ export interface IGroupProps extends IBoxProps<HTMLLIElement> {
   title?: string;
 }
 
-const Group = ({ title, disabled, children }: IGroupProps) =>
+const Group: FC<IGroupProps> = ({ title, disabled, children }) =>
   children ? (
     <li className={styles.group} role="presentation" tabIndex={-1}>
       <span role="presentation" title={title} className={styles.title}>

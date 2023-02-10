@@ -1,5 +1,13 @@
 import clsx from 'clsx';
-import { Children, cloneElement, ForwardedRef, forwardRef, isValidElement, ReactElement, useMemo } from 'react';
+import {
+  Children,
+  cloneElement,
+  forwardRef,
+  ForwardRefRenderFunction,
+  isValidElement,
+  ReactElement,
+  useMemo,
+} from 'react';
 
 import useResolution from '../../../hooks/useResolution';
 import { IBoxProps } from '../../../types/box';
@@ -12,7 +20,10 @@ export interface IGridProps extends IBoxProps {
 }
 
 // TODO: offset - to push or pull columns
-const Grid = ({ children, className, columns = 12, ...props }: IGridProps, ref: ForwardedRef<HTMLDivElement>) => {
+const Grid: ForwardRefRenderFunction<HTMLDivElement, IGridProps> = (
+  { children, className, columns = 12, ...props },
+  ref
+) => {
   const resolution = useResolution();
   const body = useMemo(() => {
     const _columnEnd = columns + 1;
@@ -41,4 +52,4 @@ const Grid = ({ children, className, columns = 12, ...props }: IGridProps, ref: 
   );
 };
 
-export default forwardRef<HTMLDivElement, IGridProps>(Grid);
+export default forwardRef(Grid);

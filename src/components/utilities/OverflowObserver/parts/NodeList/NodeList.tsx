@@ -1,14 +1,14 @@
-import { FC, ForwardRefExoticComponent, Key } from 'react';
+import { FC, Key } from 'react';
 
-import Node, { INodeBaseProps, INodeEvents } from '../Node';
+import Node, { INodeEvents, INodeProps } from '../Node';
 
 export interface INodeListProps extends INodeEvents {
-  component: ForwardRefExoticComponent<INodeBaseProps>;
+  component: INodeProps['component'];
   count?: number;
-  nodes: [Key, INodeBaseProps][];
+  nodes: [Key, any][];
 }
 
-const NodeList: FC<INodeListProps> = ({ nodes, count = 0, ...props }: INodeListProps) => (
+const NodeList: FC<INodeListProps> = ({ nodes, count = 0, ...props }) => (
   <>
     {nodes.map(([id, node], index) => (
       <Node {...props} id={id} key={id} order={index} properties={node} display={index <= count} />

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ForwardedRef, forwardRef, useMemo } from 'react';
+import { forwardRef, ForwardRefRenderFunction, useMemo } from 'react';
 
 import useResolution from '../../../hooks/useResolution';
 import { IBoxProps } from '../../../types/box';
@@ -33,19 +33,9 @@ const ALIGN_MAP = {
   end: 'flex-end',
 };
 
-const Row = (
-  {
-    children,
-    style,
-    className,
-    gap,
-    align,
-    justify = 'space-evenly',
-    direction = 'row',
-    wrap = true,
-    ...props
-  }: IRowProps,
-  ref: ForwardedRef<HTMLDivElement>
+const Row: ForwardRefRenderFunction<HTMLDivElement, IRowProps> = (
+  { children, style, className, gap, align, justify = 'space-evenly', direction = 'row', wrap = true, ...props },
+  ref
 ) => {
   const resolution = useResolution();
   const flexStyles = useMemo(
@@ -65,4 +55,4 @@ const Row = (
   );
 };
 
-export default forwardRef<HTMLDivElement, IRowProps>(Row);
+export default forwardRef(Row);

@@ -1,28 +1,17 @@
-import { Key, ReactElement } from 'react';
+import { FC, Key } from 'react';
 
 import { IBoxProps } from '../../../../../types/box';
 import { ITrackBreadth } from '../../../../../types/css';
 
-export interface IAreaPrivateProps {
-  _area?: Key;
-}
-
 export interface IAreaProps extends IBoxProps {
+  _area?: Key;
   height?: ITrackBreadth | number;
   key: string;
   semantic?: 'div' | 'aside' | 'footer' | 'header' | 'main' | 'nav' | 'section';
   width?: ITrackBreadth | number;
 }
 
-const Area = ({
-  height,
-  width,
-  children,
-  style = {},
-  semantic = 'div',
-  _area: gridArea,
-  ...props
-}: IAreaProps & IAreaPrivateProps): ReactElement<IAreaProps> => {
+const Area: FC<IAreaProps> = ({ height, width, children, style = {}, semantic = 'div', _area: gridArea, ...props }) => {
   const Tag = `${semantic}` as typeof semantic;
 
   return (

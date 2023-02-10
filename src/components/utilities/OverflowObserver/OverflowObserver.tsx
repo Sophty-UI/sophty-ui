@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { FC, ForwardRefExoticComponent, HTMLAttributes, Key, useLayoutEffect, useMemo, useState } from 'react';
+import { FC, Key, useLayoutEffect, useMemo, useState } from 'react';
 
 import ResizeObserver from '../ResizeObserver';
-import Node, { INodeBaseProps } from './parts/Node';
+import Node, { INodeProps } from './parts/Node';
 import NodeList from './parts/NodeList';
 import Rest from './parts/Rest';
 import styles from './style.module.scss';
@@ -11,41 +11,32 @@ export interface IOverflowEvents {
   onVisibleNodesChange?: (count: number) => void;
 }
 
-export interface IOverflowNodeOptions<T> {
-  component: ForwardRefExoticComponent<INodeBaseProps>;
-  /** @default id */
-  field?: keyof Omit<T, 'ref'>;
-  /** @default 10 */
-  width?: number;
-}
-
-export interface IOverflowOptions<T> {
-  node: IOverflowNodeOptions<T>;
-}
-
-export interface IOverflowProps extends HTMLAttributes<unknown>, IOverflowEvents {
+export interface IOverflowProps extends IOverflowEvents {
+  className?: string;
   component: keyof React.ReactHTML;
-  nodes: Omit<T, 'ref'>[];
-  options: IOverflowOptions<T>;
+  nodes: any[];
+  options: {
+    component: INodeProps['component'];
+    /** @default id */
+    field?: string;
+    /** @default 10 */
+    width?: number;
+  };
 }
 
-const Overflow: FC<IOverflowProps> = ({ component: Component, nodes, options, ...props }: IOverflowProps) => {
+const Overflow: FC<IOverflowProps> = ({ component: Component, nodes, options, className, ...props }) => {
   const [containerWidth, setContainerWidth] = useState<number>();
   const [nodesWidths, setNodesWidths] = useState(new Map<Key, number>());
   const [prevRestWidth, setPrevRestWidth] = useState(0);
   const [restWidth, setRestWidth] = useState(0);
   const [displayCount, setDisplayCount] = useState<number>();
   const [restReady, setRestReady] = useState(false);
-  const node: Required<IOverflowNodeOptions<T>> = {
-    field: 'id' as keyof Omit<T, 'ref'>,
-    width: 10,
-    ...options.node,
-  };
+  const node = { field: 'id', width: 10, ...options };
 
-  const mergedNodes = useMemo((): [Key, T][] => {
+  const mergedNodes = useMemo((): [Key, any][] => {
     const list = nodes.length ? nodes.slice(0, Math.min(nodes.length, (containerWidth ?? 0) / node.width)) : nodes;
 
-    return list.map((item, index) => [(item[node.field] ?? index) as Key, item as T]);
+    return list.map((item, index) => [(item[node.field] ?? index) as Key, item]);
   }, [nodes, node.field, node.width, containerWidth]);
 
   const omittedNodes = useMemo(
@@ -134,8 +125,8 @@ const Overflow: FC<IOverflowProps> = ({ component: Component, nodes, options, ..
 
   return (
     <ResizeObserver onResize={handleResize}>
-      <div className={styles.overflowContainer}>
-        <Component className={clsx(props.className, styles.nodeList)} style={props.style}>
+      <div {...props} className={clsx(className, styles.container)}>
+        <Component className={styles.list}>
           <NodeList
             component={node.component}
             nodes={mergedNodes}

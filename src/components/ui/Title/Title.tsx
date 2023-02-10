@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import { IDetailedProps } from '../../../types/box';
 import styles from './style.module.scss';
 
@@ -14,7 +16,7 @@ export interface ITitleProps extends IDetailedProps<HTMLHeadingElement> {
   level?: HeadingType;
 }
 
-const Title = ({ level = HeadingType.H1, children, ...props }: ITitleProps) => {
+const Title: FC<ITitleProps> = ({ level = HeadingType.H1, children, ...props }) => {
   const Tag = `h${Math.max(HeadingType.H1, Math.min(level, HeadingType.H6))}` as
     | 'h1'
     | 'h2'

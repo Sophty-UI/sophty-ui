@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ForwardedRef, forwardRef, ForwardRefRenderFunction } from 'react';
+import { forwardRef, ForwardRefRenderFunction } from 'react';
 
 import useResolution from '../../../hooks/useResolution';
 import { IBoxProps } from '../../../types/box';
@@ -16,8 +16,8 @@ export interface IColProps extends IBoxProps {
 const GRID_SIZE = (styles.size && parseInt(styles.size, 10)) || 0;
 
 const Col: ForwardRefRenderFunction<HTMLDivElement, IColProps> = (
-  { span, flex, grow, children, className, style, ...props }: IColProps,
-  ref: ForwardedRef<HTMLDivElement>
+  { span, flex, grow, children, className, style, ...props },
+  ref
 ) => {
   const resolution = useResolution();
   const spanIndex = !flex && span !== undefined ? calcSpan(span, resolution, GRID_SIZE) : undefined;

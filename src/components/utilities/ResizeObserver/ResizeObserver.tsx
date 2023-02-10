@@ -1,20 +1,25 @@
 import { cloneElement, FC, ReactElement, Ref, RefAttributes, useCallback, useEffect, useMemo, useRef } from 'react';
 
+import { IContainerProps } from '../../../types/box';
 import { composeRef } from '../../../utils/ref';
 import { observe, unobserve } from './utils/observer';
 
-export interface IResizeObserverEvents {
-  onResize?: (
-    size: { height: number; offsetHeight: number; offsetWidth: number; width: number },
-    element: HTMLElement
-  ) => void;
+export interface ISize {
+  height: number;
+  offsetHeight: number;
+  offsetWidth: number;
+  width: number;
 }
 
-export interface IResizeObserverProps extends IResizeObserverEvents {
+export interface IResizeObserverEvents {
+  onResize?: (size: ISize, element: HTMLElement) => void;
+}
+
+export interface IResizeObserverProps extends IContainerProps, IResizeObserverEvents {
   children: ReactElement<HTMLElement> & { ref?: Ref<HTMLElement> };
 }
 
-const ResizeObserver: FC<IResizeObserverProps> = ({ children, ...events }: IResizeObserverProps) => {
+const ResizeObserver: FC<IResizeObserverProps> = ({ children, ...events }) => {
   const nodeRef = useRef<HTMLElement>(null);
   const sizeRef = useRef({ width: -1, height: -1, offsetWidth: -1, offsetHeight: -1 });
   const mergedRef = useMemo(() => composeRef<HTMLElement>(children.ref ?? null, nodeRef), [children.ref, nodeRef]);

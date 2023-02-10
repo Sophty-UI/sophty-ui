@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
+import { FC } from 'react';
 
-const HomePage = (): ReactElement => <div>1</div>;
+const HomePage: FC = () => <div>1</div>;
 
 export default HomePage;

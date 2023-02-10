@@ -1,6 +1,6 @@
 import { ArrowDownIcon, ArrowUpIcon, CrossIcon, LoadingIcon } from '@sophty-ui/icons';
 import clsx from 'clsx';
-import { MouseEvent, ReactNode } from 'react';
+import { FC, MouseEvent, ReactNode } from 'react';
 
 import styles from './style.module.scss';
 
@@ -17,7 +17,7 @@ export interface IIconProps extends IIconEvents {
   openIcon?: ReactNode;
 }
 
-const Icon = ({
+const Icon: FC<IIconProps> = ({
   open,
   openIcon,
   closeIcon,
@@ -25,7 +25,7 @@ const Icon = ({
   clearable = false,
   disabled = false,
   ...events
-}: IIconProps) => {
+}) => {
   const arrow = open ? closeIcon ?? <ArrowUpIcon /> : openIcon ?? <ArrowDownIcon />;
   const icon = loading ? <LoadingIcon spin /> : arrow;
 

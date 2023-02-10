@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MouseEvent, TouchEvent } from 'react';
+import { FC, MouseEvent, TouchEvent } from 'react';
 
 import { IBoxProps } from '../../../../../types/box';
 import { toBooleanish } from '../../../../../utils/type';
@@ -13,7 +13,7 @@ export interface IOptionProps extends IBoxProps<HTMLLIElement> {
   value: string;
 }
 
-const Option = ({ value, label, disabled, className, children, ...props }: IOptionProps) => {
+const Option: FC<IOptionProps> = ({ value, label, disabled, className, children, ...props }) => {
   const [selectedValue, handler] = useDropdownContext();
   const [isInDisabledGroup] = useGroupContext();
   const isSelected = selectedValue === value;

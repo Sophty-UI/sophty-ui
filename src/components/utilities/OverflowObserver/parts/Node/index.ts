@@ -1,2 +1,2 @@
 export { default } from './Node';
-export type { INodeProps, INodeBaseProps, INodeEvents } from './Node';
+export type { INodeProps, INodeEvents } from './Node';

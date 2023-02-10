@@ -1,19 +1,18 @@
 import clsx from 'clsx';
-import { createRef, MouseEvent, ReactElement, ReactNode, TouchEvent, useCallback, useEffect, useState } from 'react';
+import { createRef, FC, MouseEvent, ReactNode, TouchEvent, useCallback, useEffect, useState } from 'react';
 
 import { DropdownProvider } from './contexts/DropdownContext';
 import Icon from './parts/Icon';
 import Menu, { IMenuProps } from './parts/Menu';
-import { IOptionProps } from './parts/Option';
 import styles from './style.module.scss';
 import { IDropdownChangeEvent } from './types/events';
 
 export interface IDropdownEvents {
-  onFocus?: (focus: boolean) => void;
   onChange?: IDropdownChangeEvent;
+  onFocus?: (focus: boolean) => void;
 }
 
-export interface IDropdownProps extends Omit<IMenuProps, keyof IDropdownEvents | 'children'>, IDropdownEvents {
+export interface IDropdownProps extends Omit<IMenuProps, keyof IDropdownEvents>, IDropdownEvents {
   allowClear?: boolean;
   closeAfterChange?: boolean;
   closeIcon?: ReactNode;
@@ -23,12 +22,9 @@ export interface IDropdownProps extends Omit<IMenuProps, keyof IDropdownEvents |
   openIcon?: ReactNode;
   placeholder?: string;
   type?: 'select' | 'menu';
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  children?: ReactElement<IOptionProps> | Array<ReactElement<IOptionProps>>;
 }
 
-const Dropdown = ({
+const Dropdown: FC<IDropdownProps> = ({
   allowClear,
   children,
   className,
@@ -41,10 +37,10 @@ const Dropdown = ({
   placeholder = '',
   closeAfterChange = true,
   ...events
-}: IDropdownProps) => {
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<string | undefined>();
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(defaultValue);
   const [selectedLabel, setSelectedLabel] = useState<string | undefined>(placeholder);
   const ref = createRef<HTMLDivElement>();
   const isSelect = type === 'select';
