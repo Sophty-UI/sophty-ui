@@ -1,28 +1,35 @@
 import clsx from 'clsx';
-import { FC, ForwardRefExoticComponent, Key, useEffect } from 'react';
+import { ForwardRefExoticComponent, Key, ReactElement, RefAttributes, useEffect } from 'react';
 
 import ResizeObserver from '../../../ResizeObserver';
 import styles from './style.module.scss';
 
 export interface INodeEvents {
-  onRegister: (key?: Key, width?: number) => void;
+  onRegister: (id?: Key, width?: number) => void;
 }
 
-export interface INodeProps extends INodeEvents {
-  component: ForwardRefExoticComponent<any>;
+export interface INodeProps<T, P> extends INodeEvents {
+  component: ForwardRefExoticComponent<Pick<P, keyof P> & RefAttributes<T>>;
   display: boolean;
   id?: Key;
   order: number;
-  properties?: any;
+  properties?: Omit<P, 'ref' | 'children'>;
 }
 
-const Node: FC<INodeProps> = ({ id, order, display, component: Component, properties = {}, ...events }) => {
+const Node = <T, P = unknown>({
+  id,
+  order,
+  display,
+  component: Component,
+  properties = {} as Pick<P, keyof P>,
+  ...events
+}: INodeProps<T, P>): ReactElement<P> => {
   useEffect(() => () => events.onRegister(id), []);
 
   return (
     <ResizeObserver onResize={({ offsetWidth }) => events.onRegister(id, offsetWidth)}>
       <Component
-        {...properties}
+        {...(properties as Pick<P, keyof P>)}
         className={clsx(styles.node, !display && styles.hidden)}
         style={display ? { order } : undefined}
         aria-hidden={display ? undefined : 'true'}

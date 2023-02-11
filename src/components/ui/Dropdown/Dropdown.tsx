@@ -2,12 +2,13 @@ import clsx from 'clsx';
 import { createRef, FC, MouseEvent, ReactNode, TouchEvent, useCallback, useEffect, useState } from 'react';
 
 import { DropdownProvider } from './contexts/DropdownContext';
+import Control, { IControlEvents } from './parts/Control';
 import Icon from './parts/Icon';
 import Menu, { IMenuProps } from './parts/Menu';
 import styles from './style.module.scss';
 import { IDropdownChangeEvent } from './types/events';
 
-export interface IDropdownEvents {
+export interface IDropdownEvents extends IControlEvents {
   onChange?: IDropdownChangeEvent;
   onFocus?: (focus: boolean) => void;
 }
@@ -18,6 +19,7 @@ export interface IDropdownProps extends Omit<IMenuProps, keyof IDropdownEvents>,
   closeIcon?: ReactNode;
   defaultValue?: string;
   disabled?: boolean;
+  editable?: boolean;
   loading?: boolean;
   openIcon?: ReactNode;
   placeholder?: string;
@@ -30,24 +32,28 @@ const Dropdown: FC<IDropdownProps> = ({
   className,
   closeIcon,
   defaultValue,
-  disabled,
   loading,
   openIcon,
   type = 'select',
   placeholder = '',
   closeAfterChange = true,
+  editable = true,
+  disabled: isDisabled,
   ...events
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | undefined>(defaultValue);
-  const [selectedLabel, setSelectedLabel] = useState<string | undefined>(placeholder);
-  const ref = createRef<HTMLDivElement>();
+  const [selectedLabel, setSelectedLabel] = useState<string | undefined>();
+  const [searchValue, setSearchValue] = useState<string | undefined>();
+  const refDropbox = createRef<HTMLDivElement>();
+  const refInput = createRef<HTMLInputElement>();
   const isSelect = type === 'select';
+  const isEditable = isSelect && !isDisabled && editable;
 
   useEffect(() => {
     const handleDocumentClick = ({ target }: Event): void => {
-      if (!!target && !ref.current?.contains(target as Node) && isOpen) setIsOpen(false);
+      if (!!target && !refDropbox.current?.contains(target as Node) && isOpen) setIsOpen(false);
     };
 
     document.addEventListener('click', handleDocumentClick, false);
@@ -60,17 +66,30 @@ const Dropdown: FC<IDropdownProps> = ({
   });
 
   const handleMouseDown = (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>): void => {
-    events.onFocus?.(isOpen);
+    if (isSelect && allowClear) {
+      events.onFocus?.(isOpen);
 
-    if (
-      ((event.type === 'mousedown' && (event as MouseEvent<HTMLDivElement>).button === 0) ||
-        event.type === 'touchend') &&
-      !loading
-    ) {
-      event.stopPropagation();
-      event.preventDefault();
+      if (
+        ((event.type === 'mousedown' && (event as MouseEvent<HTMLDivElement>).button === 0) ||
+          event.type === 'touchend') &&
+        !loading
+      ) {
+        event.stopPropagation();
+        event.preventDefault();
 
-      if (!disabled) setIsOpen(state => !state);
+        if (!isDisabled) {
+          const open = !isOpen;
+
+          setIsOpen(open);
+
+          if (refInput.current && open) {
+            refInput.current.focus();
+            setSearchValue(undefined);
+          } else {
+            setSearchValue(selectedLabel);
+          }
+        }
+      }
     }
   };
 
@@ -92,7 +111,7 @@ const Dropdown: FC<IDropdownProps> = ({
   const handleHover = (): void => {
     setIsHovered(state => !state);
 
-    if (!isSelect && !disabled) setIsOpen(state => !state);
+    if (!isSelect && !isDisabled) setIsOpen(state => !state);
   };
 
   const handleClear = (event: MouseEvent<HTMLElement>): void => {
@@ -103,42 +122,54 @@ const Dropdown: FC<IDropdownProps> = ({
     event.preventDefault();
   };
 
+  const handleSearch = (value: string): void => {
+    setSearchValue(value);
+    events.onSearch?.(value);
+  };
+
   return (
     <div
-      ref={ref}
+      ref={refDropbox}
       className={clsx(
         className,
         styles.dropdown,
-        disabled && styles.dropdownDisabled,
-        isOpen && styles.dropdownOpen,
-        isSelect ? styles.dropdownSelect : styles.dropdownMenu
+        isDisabled && styles.disabled,
+        isOpen && styles.open,
+        isSelect ? styles.select : styles.menu,
+        isHovered && styles.hovered
       )}
       onMouseEnter={handleHover}
       onMouseLeave={handleHover}
     >
       <div
         className={styles.control}
-        onMouseDown={isSelect && allowClear ? handleMouseDown : undefined}
-        onTouchEnd={isSelect && allowClear ? handleMouseDown : undefined}
+        onMouseDown={handleMouseDown}
+        onTouchEnd={handleMouseDown}
         aria-haspopup="listbox"
       >
-        {isSelect && (
-          <span className={clsx(styles.label, !selectedLabel && styles.placeholder)}>
-            {selectedLabel ?? placeholder}
-          </span>
-        )}
+        <Control
+          ref={refInput}
+          value={isOpen ? searchValue : selectedLabel}
+          disabled={isDisabled}
+          editable={isEditable}
+          onSearch={handleSearch}
+          open={isOpen}
+          placeholder={isEditable && isOpen ? selectedLabel : selectedLabel ?? placeholder}
+        />
+
         <Icon
+          // FIXME: searchIcon if has searchValue
           loading={loading}
           open={isOpen}
-          clearable={isSelect && allowClear && isHovered && !!selectedValue}
-          disabled={disabled}
+          clearable={isSelect && allowClear && isHovered && !isOpen && !!selectedValue}
+          disabled={isDisabled}
           openIcon={openIcon}
           closeIcon={closeIcon}
           onClear={handleClear}
         />
       </div>
       <Menu open={isOpen}>
-        <DropdownProvider value={selectedValue} handler={handleChange}>
+        <DropdownProvider selectedValue={selectedValue} searchValue={searchValue} handler={handleChange}>
           {children}
         </DropdownProvider>
       </Menu>

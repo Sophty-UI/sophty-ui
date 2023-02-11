@@ -7,43 +7,38 @@
   position: relative;
   cursor: pointer;
 
-  &.dropdown {
-    &-open {
-      .label {
-        color: $disable-color;
-      }
+  &.disabled {
+    user-select: none;
+    cursor: not-allowed;
 
-      .control {
-        border-color: $primary-color;
-        box-shadow: $shadow-3;
-      }
+    .control {
+      background-color: $background-color-neutral;
     }
+  }
 
-    &-menu {
+  &.open,
+  &.hovered:not(.disabled) {
+    .control {
+      border-color: $primary-color;
+      box-shadow: $shadow-3;
+    }
+  }
+
+  &.menu {
+    width: fit-content;
+
+    .control {
       width: fit-content;
-
-      .control {
-        width: fit-content;
-        padding-left: 0;
-      }
+      padding-left: 0;
     }
+  }
 
-    &-select {
+  &.select {
+    width: 100%;
+
+    .control {
       width: 100%;
-
-      .control {
-        width: 100%;
-        padding-left: $spacing-3;
-      }
-    }
-
-    &-disabled {
-      user-select: none;
-      cursor: not-allowed;
-
-      .label {
-        color: $disable-color;
-      }
+      padding-left: $spacing-3;
     }
   }
 }
@@ -63,18 +58,4 @@
   height: 34px;
   min-width: 34px;
   line-height: 32px;
-}
-
-.label {
-  display: inline-block;
-  height: 100%;
-  text-align: start;
-  width: calc(100% - ($icon-size + $spacing-2));
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-
-  &.placeholder {
-    color: $disable-color;
-  }
 }

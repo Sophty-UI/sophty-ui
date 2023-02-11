@@ -1,0 +1,47 @@
+@import '../../../../../theme/variables/colors';
+@import '../../../../../theme/variables/structure';
+@import '../../../../../theme/variables/spacing';
+
+.control {
+  text-align: start;
+  display: inline-block;
+  height: 100%;
+  width: calc(100% - ($icon-size + $spacing-2));
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: $title-color;
+
+  &.placeholder {
+    color: $disable-color;
+  }
+}
+
+.label {
+  cursor: pointer;
+
+  &.open {
+    color: $disable-color;
+  }
+
+  &.disabled {
+    color: $disable-color;
+  }
+}
+
+.input {
+  margin: 0;
+  padding: 0;
+  background: 0 0;
+  border: none;
+  outline: none;
+  appearance: none;
+  cursor: auto;
+
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+  }
+}

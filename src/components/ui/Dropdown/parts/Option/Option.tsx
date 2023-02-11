@@ -14,7 +14,7 @@ export interface IOptionProps extends IBoxProps<HTMLLIElement> {
 }
 
 const Option: FC<IOptionProps> = ({ value, label, disabled, className, children, ...props }) => {
-  const [selectedValue, handler] = useDropdownContext();
+  const [selectedValue, searchValue, handler] = useDropdownContext();
   const [isInDisabledGroup] = useGroupContext();
   const isSelected = selectedValue === value;
   const isDisabled = isInDisabledGroup ?? disabled;
@@ -31,7 +31,7 @@ const Option: FC<IOptionProps> = ({ value, label, disabled, className, children,
     }
   };
 
-  return (
+  return !searchValue || ((label ?? value).includes(searchValue) && !isDisabled) ? (
     <li
       {...props}
       className={clsx(className, styles.option, isSelected && styles.selected, isDisabled && styles.disabled)}
@@ -43,7 +43,7 @@ const Option: FC<IOptionProps> = ({ value, label, disabled, className, children,
     >
       {children ?? label ?? value}
     </li>
-  );
+  ) : null;
 };
 
 export default Option;

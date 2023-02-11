@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, Key, useLayoutEffect, useMemo, useState } from 'react';
+import { Key, ReactElement, useLayoutEffect, useMemo, useState } from 'react';
 
 import ResizeObserver from '../ResizeObserver';
 import Node, { INodeProps } from './parts/Node';
@@ -11,29 +11,35 @@ export interface IOverflowEvents {
   onVisibleNodesChange?: (count: number) => void;
 }
 
-export interface IOverflowProps extends IOverflowEvents {
+export interface IOverflowProps<T, P> extends IOverflowEvents {
   className?: string;
   component: keyof React.ReactHTML;
-  nodes: any[];
+  nodes: Omit<P, 'ref' | 'children'>[];
   options: {
-    component: INodeProps['component'];
-    /** @default id */
-    field?: string;
+    component: INodeProps<T, P>['component'];
+    /** @default key */
+    field?: keyof INodeProps<T, P>['properties'];
     /** @default 10 */
     width?: number;
   };
 }
 
-const Overflow: FC<IOverflowProps> = ({ component: Component, nodes, options, className, ...props }) => {
+const Overflow = <T, P = unknown>({
+  component: Component,
+  nodes,
+  options,
+  className,
+  ...props
+}: IOverflowProps<T, P>): ReactElement<P> => {
   const [containerWidth, setContainerWidth] = useState<number>();
   const [nodesWidths, setNodesWidths] = useState(new Map<Key, number>());
   const [prevRestWidth, setPrevRestWidth] = useState(0);
   const [restWidth, setRestWidth] = useState(0);
   const [displayCount, setDisplayCount] = useState<number>();
   const [restReady, setRestReady] = useState(false);
-  const node = { field: 'id', width: 10, ...options };
+  const node = { field: 'key' as keyof INodeProps<T, P>['properties'], width: 10, ...options };
 
-  const mergedNodes = useMemo((): [Key, any][] => {
+  const mergedNodes = useMemo((): [Key, INodeProps<T, P>['properties']][] => {
     const list = nodes.length ? nodes.slice(0, Math.min(nodes.length, (containerWidth ?? 0) / node.width)) : nodes;
 
     return list.map((item, index) => [(item[node.field] ?? index) as Key, item]);
@@ -125,8 +131,8 @@ const Overflow: FC<IOverflowProps> = ({ component: Component, nodes, options, cl
 
   return (
     <ResizeObserver onResize={handleResize}>
-      <div {...props} className={clsx(className, styles.container)}>
-        <Component className={styles.list}>
+      <div className={styles.container}>
+        <Component className={clsx(className, styles.list)} {...props}>
           <NodeList
             component={node.component}
             nodes={mergedNodes}
