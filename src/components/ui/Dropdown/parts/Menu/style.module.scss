@@ -17,8 +17,18 @@
   top: 100%;
   width: 100%;
   z-index: $menu-z-index;
-
   -webkit-overflow-scrolling: touch;
+  transition: visibility 0s, opacity 0.2s ease-out;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .menu {

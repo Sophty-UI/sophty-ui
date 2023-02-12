@@ -9,17 +9,16 @@ export interface IMenuProps extends IBoxProps {
   open?: boolean;
 }
 
-const Menu: FC<IMenuProps> = ({ children, className, open }) =>
-  open ? (
-    <div className={clsx(className, styles.container)} aria-expanded="true">
-      {children ? (
-        <ul className={styles.menu} tabIndex={0} role="menu">
-          {children}
-        </ul>
-      ) : (
-        <Empty />
-      )}
-    </div>
-  ) : null;
+const Menu: FC<IMenuProps> = ({ children, className, open }) => (
+  <div className={clsx(className, styles.container, open ? styles.visible : styles.hidden)} aria-expanded="true">
+    {children ? (
+      <ul className={styles.menu} tabIndex={0} role="menu">
+        {children}
+      </ul>
+    ) : (
+      <Empty />
+    )}
+  </div>
+);
 
 export default Menu;

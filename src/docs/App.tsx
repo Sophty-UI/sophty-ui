@@ -163,85 +163,207 @@ const App = (): ReactElement => {
           }}
         >
           <div style={{ padding: 12 }}>
-            <Dropdown onChange={value => console.log(value)} placeholder="placeholder text" disabled loading>
-              <Dropdown.Option value="1">1</Dropdown.Option>
-              <Dropdown.Option value="2">2</Dropdown.Option>
-              <Dropdown.Group title="3">
-                <Dropdown.Option value="3.1">3.1</Dropdown.Option>
-                <Dropdown.Option value="3.2">3.2</Dropdown.Option>
-                <Dropdown.Option value="3.3">3.3</Dropdown.Option>
-                <Dropdown.Option value="3.4">3.4</Dropdown.Option>
-              </Dropdown.Group>
-
-              <Dropdown.Option value="4">4</Dropdown.Option>
+            <Dropdown placeholder="placeholder text" disabled loading>
+              <Dropdown.Option key="1" value="1">
+                1
+              </Dropdown.Option>
+              <Dropdown.Option key="2" value="2">
+                2
+              </Dropdown.Option>
             </Dropdown>
           </div>
 
           <div style={{ padding: 12 }}>
-            <Dropdown onChange={value => console.log(value)} placeholder="placeholder text" allowClear>
-              <Dropdown.Option key="1" value="1">
-                1 menu item
+            <Dropdown placeholder="placeholder text" allowClear>
+              <Dropdown.Option key="O1" value="1">
+                O1 menu item
               </Dropdown.Option>
-              <Dropdown.Option key="2" value="2">
-                2 menu item
+              <Dropdown.Option key="O2" value="2">
+                O2 menu item
               </Dropdown.Option>
 
-              <Dropdown.Group key="g1" title="Group 1">
-                <Dropdown.Option key="g1.1" value="g1.1">
-                  1 menu item
+              <Dropdown.Group key="G1" title="Group 1">
+                <Dropdown.Option key="G1.O1" value="g1.1">
+                  G1.O1 menu item
                 </Dropdown.Option>
-                <Dropdown.Option key="g1.2" value="g1.2">
-                  2 menu item
+                <Dropdown.Option key="G1.O2" value="g1.2">
+                  G1.O2 menu item
                 </Dropdown.Option>
-                <Dropdown.Option key="g1.3" value="g1.3" disabled>
-                  3 menu item
+                <Dropdown.Option key="G1.O3" value="g1.3" disabled>
+                  G1.O3 menu item
                 </Dropdown.Option>
-                <Dropdown.Option key="g1.4" value="g1.4" disabled>
-                  4 menu item
+                <Dropdown.Option key="G1.O4" value="g1.4" disabled>
+                  G1.O4 menu item
                 </Dropdown.Option>
               </Dropdown.Group>
 
-              <Dropdown.Group key="g2" title="Group 2" disabled>
-                <Dropdown.Option key="g2.1" value="g2.1">
-                  1 menu item
+              <Dropdown.Group key="G2" title="Group 2" disabled>
+                <Dropdown.Option key="G2.O1" value="g2.1">
+                  G2.O1 menu item
                 </Dropdown.Option>
-                <Dropdown.Option key="g2.2" value="g2.2">
-                  2 menu item
+                <Dropdown.Option key="G2.O2" value="g2.2">
+                  G2.O2 menu item
                 </Dropdown.Option>
-                <Dropdown.Option key="g2.3" value="g2.3">
-                  3 menu item
+                <Dropdown.Option key="G2.O3" value="g2.3">
+                  G2.O3 menu item
                 </Dropdown.Option>
-                <Dropdown.Option key="g2.4" value="g2.4">
-                  4 menu item
+                <Dropdown.Option key="G2.O4" value="g2.4">
+                  G2.O4 menu item
                 </Dropdown.Option>
 
-                <Dropdown.Group key="g2.0.1" title="Group 2.5">
-                  <Dropdown.Option key="g2.1.1" value="g2.1.1">
-                    1 menu item
+                <Dropdown.Group key="G2.SG1" title="Group 2.5">
+                  <Dropdown.Option key="G2.SG1.O1" value="g2.1.1">
+                    G2.SG1.O1 menu item
                   </Dropdown.Option>
-                  <Dropdown.Option key="g2.2.1" value="g2.2.1">
-                    2 menu item
+                  <Dropdown.Option key="G2.SG1.O2" value="g2.2.1">
+                    G2.SG1.O2 menu item
                   </Dropdown.Option>
-                  <Dropdown.Option key="g2.3.1" value="g2.3.1">
-                    3 menu item
+                  <Dropdown.Option key="G2.SG1.O3" value="g2.3.1">
+                    G2.SG1.O3 menu item
                   </Dropdown.Option>
-                  <Dropdown.Option key="g2.4.1" value="g2.4.1">
-                    4 menu item
+                  <Dropdown.Option key="G2.SG1.O4" value="g2.4.1">
+                    G2.SG1.O4 menu item
                   </Dropdown.Option>
                 </Dropdown.Group>
               </Dropdown.Group>
 
-              <Dropdown.Option key="4" value="4">
-                4 menu item
+              <Dropdown.Option key="O4" value="4">
+                O4 menu item
               </Dropdown.Option>
-              <Dropdown.Option key="5" value="5">
-                Extra large menu item text with super duper mega large description
+              <Dropdown.Option key="O5" value="5">
+                O5 Extra large menu item text with super duper mega large description
               </Dropdown.Option>
             </Dropdown>
           </div>
 
           <div style={{ padding: 12 }}>
-            <Dropdown onChange={value => console.log(value)} type="menu" openIcon={'...'} closeIcon={'...'}>
+            <Dropdown placeholder="placeholder text" allowClear defaultValue="01" editable={false}>
+              <Dropdown.Option key="O1" value="1">
+                O1 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="O2" value="2">
+                O2 menu item
+              </Dropdown.Option>
+
+              <Dropdown.Group key="G1" title="Group 1">
+                <Dropdown.Option key="G1.O1" value="g1.1">
+                  G1.O1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G1.O2" value="g1.2">
+                  G1.O2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G1.O3" value="g1.3" disabled>
+                  G1.O3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G1.O4" value="g1.4" disabled>
+                  G1.O4 menu item
+                </Dropdown.Option>
+              </Dropdown.Group>
+
+              <Dropdown.Group key="G2" title="Group 2" disabled>
+                <Dropdown.Option key="G2.O1" value="g2.1">
+                  G2.O1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G2.O2" value="g2.2">
+                  G2.O2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G2.O3" value="g2.3">
+                  G2.O3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G2.O4" value="g2.4">
+                  G2.O4 menu item
+                </Dropdown.Option>
+
+                <Dropdown.Group key="G2.SG1" title="Group 2.5">
+                  <Dropdown.Option key="G2.SG1.O1" value="g2.1.1">
+                    G2.SG1.O1 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="G2.SG1.O2" value="g2.2.1">
+                    G2.SG1.O2 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="G2.SG1.O3" value="g2.3.1">
+                    G2.SG1.O3 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="G2.SG1.O4" value="g2.4.1">
+                    G2.SG1.O4 menu item
+                  </Dropdown.Option>
+                </Dropdown.Group>
+              </Dropdown.Group>
+
+              <Dropdown.Option key="O4" value="4">
+                O4 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="O5" value="5">
+                O5 Extra large menu item text with super duper mega large description
+              </Dropdown.Option>
+            </Dropdown>
+          </div>
+
+          <div style={{ padding: 12 }}>
+            <Dropdown placeholder="placeholder text" allowClear defaultValue="1">
+              <Dropdown.Option key="O1" value="1">
+                O1 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="O2" value="2">
+                O2 menu item
+              </Dropdown.Option>
+
+              <Dropdown.Group key="G1" title="Group 1">
+                <Dropdown.Option key="G1.O1" value="g1.1">
+                  G1.O1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G1.O2" value="g1.2">
+                  G1.O2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G1.O3" value="g1.3" disabled>
+                  G1.O3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G1.O4" value="g1.4" disabled>
+                  G1.O4 menu item
+                </Dropdown.Option>
+              </Dropdown.Group>
+
+              <Dropdown.Group key="G2" title="Group 2" disabled>
+                <Dropdown.Option key="G2.O1" value="g2.1">
+                  G2.O1 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G2.O2" value="g2.2">
+                  G2.O2 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G2.O3" value="g2.3">
+                  G2.O3 menu item
+                </Dropdown.Option>
+                <Dropdown.Option key="G2.O4" value="g2.4">
+                  G2.O4 menu item
+                </Dropdown.Option>
+
+                <Dropdown.Group key="G2.SG1" title="Group 2.5">
+                  <Dropdown.Option key="G2.SG1.O1" value="g2.1.1">
+                    G2.SG1.O1 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="G2.SG1.O2" value="g2.2.1">
+                    G2.SG1.O2 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="G2.SG1.O3" value="g2.3.1">
+                    G2.SG1.O3 menu item
+                  </Dropdown.Option>
+                  <Dropdown.Option key="G2.SG1.O4" value="g2.4.1">
+                    G2.SG1.O4 menu item
+                  </Dropdown.Option>
+                </Dropdown.Group>
+              </Dropdown.Group>
+
+              <Dropdown.Option key="O4" value="4">
+                O4 menu item
+              </Dropdown.Option>
+              <Dropdown.Option key="O5" value="5">
+                O5 Extra large menu item text with super duper mega large description
+              </Dropdown.Option>
+            </Dropdown>
+          </div>
+
+          <div style={{ padding: 12 }}>
+            <Dropdown type="menu" openIcon={'...'} closeIcon={'...'}>
               <Dropdown.Option key="1" value="1">
                 1 menu item
               </Dropdown.Option>

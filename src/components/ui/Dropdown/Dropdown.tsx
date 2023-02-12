@@ -1,15 +1,13 @@
 import clsx from 'clsx';
 import { createRef, FC, MouseEvent, ReactNode, TouchEvent, useCallback, useEffect, useState } from 'react';
 
-import { DropdownProvider } from './contexts/DropdownContext';
+import { DropdownProvider, IDropdownProviderEvents } from './contexts/DropdownContext';
 import Control, { IControlEvents } from './parts/Control';
 import Icon from './parts/Icon';
 import Menu, { IMenuProps } from './parts/Menu';
 import styles from './style.module.scss';
-import { IDropdownChangeEvent } from './types/events';
 
-export interface IDropdownEvents extends IControlEvents {
-  onChange?: IDropdownChangeEvent;
+export interface IDropdownEvents extends IDropdownProviderEvents, IControlEvents {
   onFocus?: (focus: boolean) => void;
 }
 
@@ -43,34 +41,34 @@ const Dropdown: FC<IDropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<string | undefined>(defaultValue);
+  const [selectedValue, setSelectedValue] = useState<string | undefined>();
   const [selectedLabel, setSelectedLabel] = useState<string | undefined>();
   const [searchValue, setSearchValue] = useState<string | undefined>();
   const refDropbox = createRef<HTMLDivElement>();
-  const refInput = createRef<HTMLInputElement>();
   const isSelect = type === 'select';
   const isEditable = isSelect && !isDisabled && editable;
 
   useEffect(() => {
-    const handleDocumentClick = ({ target }: Event): void => {
-      if (!!target && !refDropbox.current?.contains(target as Node) && isOpen) setIsOpen(false);
+    const listener = ({ target }: Event): void => {
+      if (!target || !refDropbox.current?.contains(target as Node)) {
+        setIsOpen(false);
+        setIsHovered(false);
+      }
     };
 
-    document.addEventListener('click', handleDocumentClick, false);
-    document.addEventListener('touchend', handleDocumentClick, false);
+    document.addEventListener('mousedown', listener, false);
+    document.addEventListener('touchstart', listener, false);
 
     return () => {
-      document.removeEventListener('click', handleDocumentClick, false);
-      document.removeEventListener('touchend', handleDocumentClick, false);
+      document.removeEventListener('mousedown', listener, false);
+      document.removeEventListener('touchstart', listener, false);
     };
   });
 
-  const handleMouseDown = (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>): void => {
+  const handleActivate = (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>): void => {
     if (isSelect && allowClear) {
-      events.onFocus?.(isOpen);
-
       if (
-        ((event.type === 'mousedown' && (event as MouseEvent<HTMLDivElement>).button === 0) ||
+        ((event.type === 'mouseup' && (event as MouseEvent<HTMLDivElement>).button === 0) ||
           event.type === 'touchend') &&
         !loading
       ) {
@@ -80,38 +78,44 @@ const Dropdown: FC<IDropdownProps> = ({
         if (!isDisabled) {
           const open = !isOpen;
 
+          if (open) setSearchValue(undefined);
+          else setSearchValue(selectedLabel);
+
           setIsOpen(open);
 
-          if (refInput.current && open) {
-            refInput.current.focus();
-            setSearchValue(undefined);
-          } else {
-            setSearchValue(selectedLabel);
-          }
+          events.onFocus?.(open);
         }
       }
     }
   };
 
   const handleChange = useCallback(
-    (value: string, label: string, event: MouseEvent<HTMLLIElement> | TouchEvent<HTMLLIElement>): void => {
+    (value: string, label: string): void => {
       if (value !== selectedValue) {
         setSelectedValue(value);
         setSelectedLabel(label);
         setIsHovered(state => !state);
 
-        events.onChange?.(value, label, event);
+        events.onChange?.(value, label);
 
-        if (closeAfterChange) setIsOpen(false);
+        if (closeAfterChange) {
+          setIsOpen(false);
+          events.onFocus?.(false);
+        }
       }
     },
     [events.onChange, closeAfterChange]
   );
 
-  const handleHover = (): void => {
-    setIsHovered(state => !state);
+  const handleHover = (event: MouseEvent): void => {
+    setIsHovered(event.type === 'mouseenter');
 
-    if (!isSelect && !isDisabled) setIsOpen(state => !state);
+    if (!isSelect && !isDisabled) {
+      const open = !isOpen;
+
+      events.onFocus?.(open);
+      setIsOpen(open);
+    }
   };
 
   const handleClear = (event: MouseEvent<HTMLElement>): void => {
@@ -141,20 +145,14 @@ const Dropdown: FC<IDropdownProps> = ({
       onMouseEnter={handleHover}
       onMouseLeave={handleHover}
     >
-      <div
-        className={styles.control}
-        onMouseDown={handleMouseDown}
-        onTouchEnd={handleMouseDown}
-        aria-haspopup="listbox"
-      >
+      <div className={styles.control} onMouseUp={handleActivate} onTouchEnd={handleActivate} aria-haspopup="listbox">
         <Control
-          ref={refInput}
           value={isOpen ? searchValue : selectedLabel}
           disabled={isDisabled}
           editable={isEditable}
           onSearch={handleSearch}
           open={isOpen}
-          placeholder={isEditable && isOpen ? selectedLabel : selectedLabel ?? placeholder}
+          placeholder={selectedLabel ?? placeholder}
         />
 
         <Icon
@@ -169,7 +167,12 @@ const Dropdown: FC<IDropdownProps> = ({
         />
       </div>
       <Menu open={isOpen}>
-        <DropdownProvider selectedValue={selectedValue} searchValue={searchValue} handler={handleChange}>
+        <DropdownProvider
+          selectedValue={selectedValue}
+          searchValue={searchValue}
+          defaultValue={defaultValue}
+          onChange={handleChange}
+        >
           {children}
         </DropdownProvider>
       </Menu>

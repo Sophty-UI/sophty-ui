@@ -4,27 +4,26 @@
 
 .control {
   text-align: start;
-  display: inline-block;
   height: 100%;
   width: calc(100% - ($icon-size + $spacing-2));
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   color: $title-color;
+}
 
-  &.placeholder {
-    color: $disable-color;
-  }
+.visible {
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
 }
 
 .label {
   cursor: pointer;
 
-  &.open {
-    color: $disable-color;
-  }
-
-  &.disabled {
+  &.placeholder {
     color: $disable-color;
   }
 }
@@ -36,7 +35,11 @@
   border: none;
   outline: none;
   appearance: none;
-  cursor: auto;
+  cursor: text;
+
+  &::placeholder {
+    color: $disable-color;
+  }
 
   &::-webkit-search-decoration,
   &::-webkit-search-cancel-button,

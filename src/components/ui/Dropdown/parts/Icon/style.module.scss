@@ -3,6 +3,7 @@
 
 .icon {
   user-select: none;
+  -webkit-user-select: none;
   width: fit-content;
   height: 100%;
   font-size: $icon-size;
@@ -11,6 +12,7 @@
   justify-content: center;
   flex-grow: 1;
   color: $title-color;
+  pointer-events: none;
 
   &.disabled {
     color: $disable-color;
