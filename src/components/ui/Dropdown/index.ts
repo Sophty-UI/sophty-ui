@@ -6,7 +6,7 @@ import { default as Option, IOptionProps } from './parts/Option';
 
 export type IDropdownProps = typeof DropdownBase & {
   Group: FC<IGroupProps>;
-  Option: FC<Omit<IOptionProps, '_key'>>;
+  Option: FC<IOptionProps>;
 };
 
 const Dropdown = DropdownBase as IDropdownProps;

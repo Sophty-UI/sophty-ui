@@ -16,6 +16,7 @@ export interface IMenuProps extends Omit<IDetailedProps<HTMLUListElement>, 'chil
   selectedId?: string;
 }
 
+// FIXME: composition
 const Menu: FC<IMenuProps> = ({ selectedId, className, items, onSelect, mode = 'horizontal', ...props }) => {
   const [selected, setSelected] = useState<string | undefined>(selectedId);
 

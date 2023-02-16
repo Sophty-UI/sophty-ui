@@ -12,12 +12,14 @@ $flex-grid-size: 24;
 
       &.grow {
         flex: auto;
+        max-width: 100%;
       }
     }
   }
 
   &.grow {
     flex-grow: 1;
+    max-width: 100%;
   }
 }
 

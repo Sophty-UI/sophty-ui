@@ -1,0 +1,57 @@
+@use 'sass:math';
+
+@import '../../../../../theme/variables/colors';
+@import '../../../../../theme/variables/structure';
+@import '../../../../../theme/variables/spacing';
+
+.listbox {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-left: math.div($spacing-3, 2);
+}
+
+.label {
+  cursor: pointer;
+
+  &.placeholder {
+    color: $disable-color;
+  }
+}
+
+.input {
+  appearance: none;
+  background: 0 0;
+  border: none;
+  cursor: text;
+  margin: 0;
+  outline: none;
+  padding: 0;
+
+  &::placeholder {
+    color: $disable-color;
+  }
+
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+  }
+}
+
+.input,
+.label {
+  color: inherit;
+  height: 100%;
+  overflow: hidden;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  width: calc(100% - ($icon-size + $spacing-2));
+}

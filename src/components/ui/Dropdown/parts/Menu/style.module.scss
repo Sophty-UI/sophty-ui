@@ -3,7 +3,7 @@
 @import '../../../../../theme/variables/shadows';
 @import '../../../../../theme/variables/structure';
 
-.container {
+.menu {
   background-color: $background-color-base;
   border-radius: $border-radius-large;
   border: 1px solid $border-color;
@@ -31,7 +31,7 @@
   }
 }
 
-.menu {
+.list {
   margin: 0;
   padding: 0;
   list-style-type: none;

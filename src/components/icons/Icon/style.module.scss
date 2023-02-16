@@ -1,5 +1,5 @@
-@import '../../../../../theme/variables/colors';
-@import '../../../../../theme/variables/structure';
+@import '../../../theme/variables/colors';
+@import '../../../theme/variables/structure';
 
 .icon {
   user-select: none;
@@ -17,8 +17,4 @@
   &.disabled {
     color: $disable-color;
   }
-}
-
-.clear {
-  color: $disable-color;
 }

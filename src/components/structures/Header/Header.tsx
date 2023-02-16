@@ -18,7 +18,7 @@ const LOGO_SPAN = { xs: 12, sm: 12, md: 6, lg: 6, xl: 4, sl: 4 };
 const MENU_SPAN = { xs: 12, sm: 12, md: 18, lg: 18, xl: 20, sl: 20 };
 
 // TODO: Mobile side menu
-
+// FIXME: rebuild to composition
 const Header: ForwardRefRenderFunction<HTMLDivElement, IHeaderProps> = (
   { className, logo, menu, extra, ...props },
   ref

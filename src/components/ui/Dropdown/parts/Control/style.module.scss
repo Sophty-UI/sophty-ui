@@ -1,50 +1,39 @@
 @import '../../../../../theme/variables/colors';
 @import '../../../../../theme/variables/structure';
 @import '../../../../../theme/variables/spacing';
+@import '../../../../../theme/variables/shadows';
+
+$dropdown-control-normal-size: 32px;
 
 .control {
-  text-align: start;
-  height: 100%;
-  width: calc(100% - ($icon-size + $spacing-2));
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  color: $title-color;
-}
-
-.visible {
-  display: inline-block;
-}
-
-.hidden {
-  display: none;
-}
-
-.label {
+  position: relative;
   cursor: pointer;
+  color: $title-color;
+  background-color: $white;
+  border: $border-width solid $border-color;
+  border-radius: $border-radius-base;
+  height: calc($dropdown-control-normal-size + ($border-width * 2));
+  min-width: calc($dropdown-control-normal-size + ($border-width * 2));
+  line-height: $dropdown-control-normal-size;
 
-  &.placeholder {
-    color: $disable-color;
-  }
-}
-
-.input {
-  margin: 0;
-  padding: 0;
-  background: 0 0;
-  border: none;
-  outline: none;
-  appearance: none;
-  cursor: text;
-
-  &::placeholder {
-    color: $disable-color;
+  &.menu {
+    width: fit-content;
   }
 
-  &::-webkit-search-decoration,
-  &::-webkit-search-cancel-button,
-  &::-webkit-search-results-button,
-  &::-webkit-search-results-decoration {
-    -webkit-appearance: none;
+  &.select {
+    width: 100%;
+  }
+
+  &.disabled {
+    user-select: none;
+    cursor: not-allowed;
+    background-color: $background-color-neutral;
+    color: $disable-color;
+  }
+
+  &.open,
+  &:hover:not(.disabled) {
+    border-color: $primary-color;
+    box-shadow: $shadow-3;
   }
 }
