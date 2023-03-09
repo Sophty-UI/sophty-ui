@@ -95,7 +95,7 @@ const App = (): ReactElement => {
           }}
         >
           <div style={{ padding: 12 }}>
-            <Dropdown placeholder="placeholder text">
+            <Dropdown placeholder="placeholder text" loading>
               {items222.map(([key, value, label]) => (
                 <Dropdown.Option key={key} value={value} label={label} />
               ))}

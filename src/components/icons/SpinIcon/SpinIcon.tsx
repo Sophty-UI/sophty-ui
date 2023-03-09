@@ -5,8 +5,8 @@ import Icon, { IIconProps } from '../Icon';
 
 export interface ISpinIconProps extends IIconProps {}
 
-const SpinIcon: FC<ISpinIconProps> = ({ disabled }) => (
-  <Icon disabled={disabled}>
+const SpinIcon: FC<ISpinIconProps> = ({ ...props }) => (
+  <Icon {...props}>
     <LoadingIcon spin />
   </Icon>
 );

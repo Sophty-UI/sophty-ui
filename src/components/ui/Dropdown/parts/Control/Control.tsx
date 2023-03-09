@@ -1,7 +1,8 @@
 import clsx from 'clsx';
-import { createRef, FC, MouseEvent, TouchEvent, useEffect, useState } from 'react';
+import { createRef, FC, MouseEvent, TouchEvent, useCallback, useEffect, useState } from 'react';
 
 import { IBoxProps } from '../../../../../types/box';
+import { useSelectionChangeContext } from '../../contexts/SelectionContext';
 import { DropdownType } from '../../types/enums';
 import ListBox from '../ListBox';
 import { IListBoxEvents, IListBoxProps } from '../ListBox/ListBox';
@@ -12,8 +13,6 @@ export interface IControlEvents extends IListBoxEvents {
   onFocus?: (focus: boolean) => void;
 }
 
-// TODO: keyboard events (up, down, enter)
-// FIXME: fix close after click on disabled option
 // FIXME: menu type
 export interface IControlProps extends Omit<IBoxProps, keyof IControlEvents>, Partial<IListBoxProps>, IControlEvents {
   type?: DropdownType;
@@ -34,6 +33,7 @@ const Control: FC<IControlProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const isSelect = type === DropdownType.Select;
+  const handleSelectionChange = useSelectionChangeContext();
 
   useEffect(() => {
     const listener = ({ target }: Event): void => {
@@ -59,22 +59,37 @@ const Control: FC<IControlProps> = ({
       !isDisabled &&
       ((event.type === 'mouseup' && (event as MouseEvent<HTMLDivElement>).button === 0) || event.type === 'touchend')
     ) {
-      const focus = !isOpen;
+      const role = (event.target as Element).attributes.getNamedItem('role')?.value;
 
-      setIsOpen(focus);
-      events.onFocus?.(focus);
-      event.stopPropagation();
-      event.preventDefault();
+      if (role !== 'presentation' && role !== 'none') {
+        const focus = !isOpen;
+
+        setIsOpen(focus);
+        events.onFocus?.(focus);
+        event.stopPropagation();
+        event.preventDefault();
+      }
     }
   };
 
-  const handleHover = (event: MouseEvent): void => {
-    const hover = event.type === 'mouseenter';
+  const handleHover = useCallback(
+    (event: MouseEvent): void => {
+      const hover = event.type === 'mouseenter';
 
-    setIsHover(hover);
+      setIsHover(hover);
 
-    if (!isSelect && !isDisabled) setIsOpen(hover);
-  };
+      if (!isSelect && !isDisabled) setIsOpen(hover);
+    },
+    [setIsHover, setIsOpen]
+  );
+
+  const handleSelect = useCallback(
+    (value: string, label: string): void => {
+      handleSelectionChange(value, label);
+      setIsOpen(false);
+    },
+    [handleSelectionChange, setIsOpen]
+  );
 
   return (
     <div
@@ -101,7 +116,9 @@ const Control: FC<IControlProps> = ({
         onFilter={events.onFilter}
       />
 
-      <Menu open={isOpen}>{children}</Menu>
+      <Menu open={isOpen} onSelect={handleSelect}>
+        {children}
+      </Menu>
     </div>
   );
 };

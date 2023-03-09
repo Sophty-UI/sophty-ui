@@ -11,7 +11,7 @@
   padding: $dropdown-item-padding;
   border-radius: $border-radius-base;
 
-  &:hover:not(.disabled, .selected) {
+  &.hover:not(.disabled, .selected) {
     background-color: $background-color-neutral;
   }
 
@@ -23,5 +23,6 @@
   &.disabled {
     color: $disable-color;
     cursor: not-allowed;
+    user-select: none;
   }
 }
