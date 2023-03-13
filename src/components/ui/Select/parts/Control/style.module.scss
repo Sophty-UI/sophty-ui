@@ -4,7 +4,7 @@
 @import '../../../../../theme/variables/structure';
 @import '../../../../../theme/variables/spacing';
 
-.listbox {
+.control {
   align-items: flex-start;
   display: flex;
   justify-content: space-between;
@@ -17,9 +17,14 @@
 
 .label {
   cursor: pointer;
+  user-select: none;
 
   &.placeholder {
     color: $disable-color;
+  }
+
+  &.editable {
+    cursor: text;
   }
 }
 
@@ -27,10 +32,10 @@
   appearance: none;
   background: 0 0;
   border: none;
-  cursor: text;
   margin: 0;
   outline: none;
   padding: 0;
+  cursor: text;
 
   &::placeholder {
     color: $disable-color;

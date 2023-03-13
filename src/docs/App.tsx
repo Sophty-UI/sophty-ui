@@ -4,7 +4,7 @@ import { ReactElement, useEffect, useState } from 'react';
 
 import { Col, Grid, Layout, Row } from '../components/layouts';
 import { Header } from '../components/structures';
-import { Dropdown, Logo } from '../components/ui';
+import { Logo, Select } from '../components/ui';
 import { ResizeObserver } from '../components/utilities';
 
 import '../theme/assets/preflight.css';
@@ -95,31 +95,39 @@ const App = (): ReactElement => {
           }}
         >
           <div style={{ padding: 12 }}>
-            <Dropdown placeholder="placeholder text" loading>
+            <Select placeholder="Placeholder text" loading>
               {items222.map(([key, value, label]) => (
-                <Dropdown.Option key={key} value={value} label={label} />
+                <Select.Option key={key} value={value} label={label} />
               ))}
-            </Dropdown>
+            </Select>
           </div>
 
           <div style={{ padding: 12 }}>
-            <Dropdown placeholder="placeholder text" allowClear disabled>
+            <Select placeholder="Placeholder text" allowClear disabled>
               {items222.map(([key, value, label]) => (
-                <Dropdown.Option key={key} value={value} label={label} />
+                <Select.Option key={key} value={value} label={label} />
               ))}
-            </Dropdown>
+            </Select>
           </div>
 
           <div style={{ padding: 12 }}>
-            <Dropdown
-              placeholder="placeholder text"
+            <Select allowClear>
+              {items222.map(([key, value, label]) => (
+                <Select.Option key={key} value={value} label={label} />
+              ))}
+            </Select>
+          </div>
+
+          <div style={{ padding: 12 }}>
+            <Select
+              placeholder="Select item"
               editable
               allowClear
               onChange={(value, label) => console.log(`Change: ${value}, ${label}`)}
               onFocus={focus => console.log(`Focus: ${focus}`)}
               onFilter={searchString => console.log(`Search: ${searchString}`)}
             >
-              <Dropdown.Option key="O1" value="1" label="O1 menu item">
+              <Select.Option key="O1" value="1" label="O1 menu item">
                 <Row justify={'start'} gap={8}>
                   <Col style={{ width: 'fit-content', alignItems: 'center', display: 'flex' }}>
                     <div
@@ -140,37 +148,37 @@ const App = (): ReactElement => {
                     O1 menu item
                   </Col>
                 </Row>
-              </Dropdown.Option>
-              <Dropdown.Option key="O2" value="2" label="O2 menu item" />
+              </Select.Option>
+              <Select.Option key="O2" value="2" label="O2 menu item" />
 
-              <Dropdown.Group key="G1" title="Group 1">
-                <Dropdown.Option key="G1.O1" value="g1.1" label="G1.O1 menu item" />
-                <Dropdown.Option key="G1.O2" value="g1.2" label="G1.O2 menu item" />
-                <Dropdown.Option key="G1.O3" value="g1.3" label="G1.O3 menu item" disabled />
-                <Dropdown.Option key="G1.O4" value="g1.4" label="G1.O4 menu item" disabled />
-              </Dropdown.Group>
+              <Select.Group key="G1" title="Group 1">
+                <Select.Option key="G1.O1" value="g1.1" label="G1.O1 menu item" />
+                <Select.Option key="G1.O2" value="g1.2" label="G1.O2 menu item" />
+                <Select.Option key="G1.O3" value="g1.3" label="G1.O3 menu item" disabled />
+                <Select.Option key="G1.O4" value="g1.4" label="G1.O4 menu item" disabled />
+              </Select.Group>
 
-              <Dropdown.Group key="G2" title="Group 2" disabled>
-                <Dropdown.Option key="G2.O1" value="g2.1" label="G2.O1 menu item" />
-                <Dropdown.Option key="G2.O2" value="g2.2" label="G2.O2 menu item" />
-                <Dropdown.Option key="G2.O3" value="g2.3" label="G2.O3 menu item" />
-                <Dropdown.Option key="G2.O4" value="g2.4" label="G2.O4 menu item" />
+              <Select.Group key="G2" title="Group 2" disabled>
+                <Select.Option key="G2.O1" value="g2.1" label="G2.O1 menu item" />
+                <Select.Option key="G2.O2" value="g2.2" label="G2.O2 menu item" />
+                <Select.Option key="G2.O3" value="g2.3" label="G2.O3 menu item" />
+                <Select.Option key="G2.O4" value="g2.4" label="G2.O4 menu item" />
 
-                <Dropdown.Group key="G2.SG1" title="Group 2.5">
-                  <Dropdown.Option key="G2.SG1.O1" value="g2.1.1" label="G2.SG1.O1 menu item" />
-                  <Dropdown.Option key="G2.SG1.O2" value="g2.2.1" label="G2.SG1.O2 menu item" />
-                  <Dropdown.Option key="G2.SG1.O3" value="g2.3.1" label="G2.SG1.O3 menu item" />
-                  <Dropdown.Option key="G2.SG1.O4" value="g2.4.1" label="G2.SG1.O4 menu item" />
-                </Dropdown.Group>
-              </Dropdown.Group>
+                <Select.Group key="G2.SG1" title="Group 2.5">
+                  <Select.Option key="G2.SG1.O1" value="g2.1.1" label="G2.SG1.O1 menu item" />
+                  <Select.Option key="G2.SG1.O2" value="g2.2.1" label="G2.SG1.O2 menu item" />
+                  <Select.Option key="G2.SG1.O3" value="g2.3.1" label="G2.SG1.O3 menu item" />
+                  <Select.Option key="G2.SG1.O4" value="g2.4.1" label="G2.SG1.O4 menu item" />
+                </Select.Group>
+              </Select.Group>
 
-              <Dropdown.Option key="O4" value="4" label="O4 menu item" />
-              <Dropdown.Option
+              <Select.Option key="O4" value="4" label="O4 menu item" />
+              <Select.Option
                 key="O5"
                 value="5"
                 label="O5 Extra large menu item text with super duper mega large description"
               />
-            </Dropdown>
+            </Select>
           </div>
         </div>
         <div style={{ backgroundColor: 'yellow' }}>

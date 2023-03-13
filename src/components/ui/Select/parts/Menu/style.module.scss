@@ -18,7 +18,7 @@
   width: 100%;
   z-index: $menu-z-index;
   -webkit-overflow-scrolling: touch;
-  transition: visibility 0s, opacity 0.2s ease-out;
+  transition: visibility 0s, opacity 0.3s ease-out;
 
   &.visible {
     visibility: visible;

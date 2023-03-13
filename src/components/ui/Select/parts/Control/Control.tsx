@@ -1,17 +1,15 @@
 import clsx from 'clsx';
 import { ChangeEvent, createRef, FC, useEffect, useState } from 'react';
 
-import ClearIcon from '../../../../icons/ClearIcon';
-import SpinIcon from '../../../../icons/SpinIcon';
-import SwitchArrowIcon from '../../../../icons/SwitchArrowIcon';
+import Icon from '../../../Select/parts/Icon';
 import { useSelectionChangeContext, useSelectionLabelContext } from '../../contexts/SelectionContext';
 import styles from './style.module.scss';
 
-export interface IListBoxEvents {
+export interface IControlEvents {
   onFilter?: (searchString: string) => void;
 }
 
-export interface IListBoxProps extends IListBoxEvents {
+export interface IControlProps extends IControlEvents {
   allowClear: boolean;
   disabled: boolean;
   editable: boolean;
@@ -20,7 +18,7 @@ export interface IListBoxProps extends IListBoxEvents {
   placeholder?: string;
 }
 
-const ListBox: FC<IListBoxProps> = ({
+const Control: FC<IControlProps> = ({
   placeholder,
   allowClear,
   editable: isEditable,
@@ -50,7 +48,7 @@ const ListBox: FC<IListBoxProps> = ({
   };
 
   return (
-    <div className={styles.listbox} aria-haspopup="listbox">
+    <div className={styles.control} aria-haspopup="listbox">
       {isEditable && isOpen ? (
         <input
           ref={ref}
@@ -64,22 +62,22 @@ const ListBox: FC<IListBoxProps> = ({
           onChange={handleChange}
         />
       ) : (
-        <span className={clsx(styles.label, (isDisabled || !label) && styles.placeholder)}>{label ?? placeholder}</span>
+        <span
+          className={clsx(styles.label, isEditable && styles.editable, (isDisabled || !label) && styles.placeholder)}
+        >
+          {label ?? placeholder}
+        </span>
       )}
 
-      {isLoading ? (
-        <SpinIcon disabled={isDisabled} />
-      ) : (
-        <>
-          {allowClear && (!!label || !!value) ? (
-            <ClearIcon onClear={handleClear} disabled={isDisabled} />
-          ) : (
-            <SwitchArrowIcon status={isOpen} disabled={isDisabled} />
-          )}
-        </>
-      )}
+      <Icon
+        allowClear={allowClear && (!!label || !!value)}
+        open={isOpen}
+        loading={isLoading}
+        disabled={isDisabled}
+        onClear={handleClear}
+      />
     </div>
   );
 };
 
-export default ListBox;
+export default Control;

@@ -32,7 +32,6 @@ const registerOption = (): [IEffectProviderEvents['onRegister'], [string, string
 
 const EffectProvider: FC<IEffectProviderProps> = ({ open, children, ...events }) => {
   const [index, setIndex] = useState(0);
-
   const [handleRegister, options] = useMemo(registerOption, [children]);
   const handleChange = useCallback((value: number) => setIndex(value), [children]);
 

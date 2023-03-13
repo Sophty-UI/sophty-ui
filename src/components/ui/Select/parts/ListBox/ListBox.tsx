@@ -3,42 +3,36 @@ import { createRef, FC, MouseEvent, TouchEvent, useCallback, useEffect, useState
 
 import { IBoxProps } from '../../../../../types/box';
 import { useSelectionChangeContext } from '../../contexts/SelectionContext';
-import { DropdownType } from '../../types/enums';
-import ListBox from '../ListBox';
-import { IListBoxEvents, IListBoxProps } from '../ListBox/ListBox';
+import Control, { IControlProps } from '../Control';
 import Menu from '../Menu';
 import styles from './style.module.scss';
 
-export interface IControlEvents extends IListBoxEvents {
+export interface IListBoxEvents {
   onFocus?: (focus: boolean) => void;
+  onOpenChange: (open: boolean) => void;
 }
 
-// FIXME: menu type
-export interface IControlProps extends Omit<IBoxProps, keyof IControlEvents>, Partial<IListBoxProps>, IControlEvents {
-  type?: DropdownType;
-}
+export type IListBoxProps = Omit<IBoxProps, keyof IListBoxEvents> & Partial<IControlProps> & IListBoxEvents;
 
-const Control: FC<IControlProps> = ({
+const ListBox: FC<IListBoxProps> = ({
   className,
   children,
   placeholder,
   disabled: isDisabled = false,
   loading: isLoading = false,
   editable: isEditable = false,
+  open: isOpen = false,
   allowClear = false,
-  type = DropdownType.Select,
   ...events
 }) => {
   const ref = createRef<HTMLDivElement>();
-  const [isOpen, setIsOpen] = useState(false);
   const [isHover, setIsHover] = useState(false);
-  const isSelect = type === DropdownType.Select;
   const handleSelectionChange = useSelectionChangeContext();
 
   useEffect(() => {
     const listener = ({ target }: Event): void => {
       if (isOpen && (!target || !ref.current?.contains(target as Node))) {
-        setIsOpen(false);
+        events.onOpenChange(false);
         events.onFocus?.(false);
       }
     };
@@ -54,7 +48,6 @@ const Control: FC<IControlProps> = ({
 
   const handleActivate = (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>): void => {
     if (
-      isSelect &&
       !isLoading &&
       !isDisabled &&
       ((event.type === 'mouseup' && (event as MouseEvent<HTMLDivElement>).button === 0) || event.type === 'touchend')
@@ -64,7 +57,7 @@ const Control: FC<IControlProps> = ({
       if (role !== 'presentation' && role !== 'none') {
         const focus = !isOpen;
 
-        setIsOpen(focus);
+        events.onOpenChange(focus);
         events.onFocus?.(focus);
         event.stopPropagation();
         event.preventDefault();
@@ -72,41 +65,26 @@ const Control: FC<IControlProps> = ({
     }
   };
 
-  const handleHover = useCallback(
-    (event: MouseEvent): void => {
-      const hover = event.type === 'mouseenter';
-
-      setIsHover(hover);
-
-      if (!isSelect && !isDisabled) setIsOpen(hover);
-    },
-    [setIsHover, setIsOpen]
-  );
+  const handleHover = useCallback((event: MouseEvent): void => setIsHover(event.type === 'mouseenter'), [setIsHover]);
 
   const handleSelect = useCallback(
     (value: string, label: string): void => {
       handleSelectionChange(value, label);
-      setIsOpen(false);
+      events.onOpenChange(false);
     },
-    [handleSelectionChange, setIsOpen]
+    [handleSelectionChange]
   );
 
   return (
     <div
       ref={ref}
-      className={clsx(
-        className,
-        styles.control,
-        isSelect ? styles.select : styles.menu,
-        isDisabled && styles.disabled,
-        isOpen && styles.open
-      )}
+      className={clsx(className, styles.listbox, isDisabled && styles.disabled, isOpen && styles.open)}
       onMouseUp={handleActivate}
       onTouchEnd={handleActivate}
       onMouseEnter={handleHover}
       onMouseLeave={handleHover}
     >
-      <ListBox
+      <Control
         placeholder={placeholder}
         open={isOpen}
         disabled={isDisabled}
@@ -123,4 +101,4 @@ const Control: FC<IControlProps> = ({
   );
 };
 
-export default Control;
+export default ListBox;

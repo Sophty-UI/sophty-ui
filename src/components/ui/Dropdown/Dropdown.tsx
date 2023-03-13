@@ -1,30 +1,23 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, ReactNode } from 'react';
 
-import SelectionProvider from './contexts/SelectionContext';
-import Control, { IControlProps } from './parts/Control';
+export interface IDropdownEvents {}
 
-export interface IDropdownEvents {
-  onChange?: (value?: string, label?: string) => void;
+export interface IDropdownProps extends IDropdownEvents {
+  children: ReactNode;
 }
 
-export interface IDropdownProps extends IDropdownEvents, Omit<IControlProps, keyof IDropdownEvents> {}
+// TODO: Portal
+// TODO: Position (topLeft, top, topRight, ...)
+// TODO: AutoPosition
+// TODO: Arrow/Without Arrow
 
-const Dropdown: FC<IDropdownProps> = ({ onChange, children, ...props }) => {
-  const [selection, setSelection] = useState<{ label?: string; value?: string }>({});
+// Dropdown.Target?
+// Dropdown.Content?
 
-  const handleSelectionChange = useCallback(
-    (value?: string, label?: string): void => {
-      setSelection({ value, label });
-      onChange?.(value, label);
-    },
-    [children, onChange]
-  );
+const Dropdown: FC<IDropdownProps> = ({ children }) => {
+  console.log('empty');
 
-  return (
-    <SelectionProvider value={selection.value} label={selection.label} onChange={handleSelectionChange}>
-      <Control {...props}>{children}</Control>
-    </SelectionProvider>
-  );
+  return <div>{children}</div>;
 };
 
 export default Dropdown;

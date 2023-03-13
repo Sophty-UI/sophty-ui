@@ -7,8 +7,8 @@ export interface ISwitchArrowIconProps extends IIconProps {
   status?: boolean;
 }
 
-const SwitchArrowIcon: FC<ISwitchArrowIconProps> = ({ status, disabled }) => (
-  <Icon disabled={disabled}>{status ? <ArrowUpIcon /> : <ArrowDownIcon />}</Icon>
+const SwitchArrowIcon: FC<ISwitchArrowIconProps> = ({ status, ...props }) => (
+  <Icon {...props}>{status ? <ArrowUpIcon /> : <ArrowDownIcon />}</Icon>
 );
 
 export default SwitchArrowIcon;
