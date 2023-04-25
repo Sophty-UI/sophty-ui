@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
 
-export type IDetailedProps<T> = DetailedHTMLProps<HTMLAttributes<T>, T>;
+import { IGap } from './resolution';
 
-export type IContainerProps = { children?: ReactNode | ReactNode[] };
-export type IBoxProps<T = HTMLDivElement> = IDetailedProps<T> & IContainerProps;
+export type IContainer = { children?: ReactNode | ReactNode[] };
+export type IBox<T = HTMLDivElement> = DetailedHTMLProps<HTMLAttributes<T>, T> & IContainer;
+export type IFlexBox = IBox & { gap?: IGap | [IGap, IGap] };

@@ -1,0 +1,10 @@
+@import '../../../theme/mixins';
+
+.box {
+  @include size();
+  @include flex-center();
+}
+
+.area {
+  display: inline-grid;
+}

@@ -1,12 +1,14 @@
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
 import { walk } from 'estree-walker';
 import MagicString from 'magic-string';
 import path from 'path';
 import { OutputBundle, RollupOptions } from 'rollup';
 import copy from 'rollup-plugin-copy';
 import postcss from 'rollup-plugin-postcss';
+
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
 
 export default {
   input: 'src/index.ts',
@@ -32,8 +34,7 @@ export default {
         localsConvention: 'camelCaseOnly',
       },
     }),
-    commonjs(),
-    typescript({ include: ['src/**/*'], exclude: ['src/docs/**/*'] }),
+    typescript({ include: ['src/**/*'], exclude: [] }),
     (() => ({
       name: 'fix-external-path',
       generateBundle(_, bundle: OutputBundle): void {
@@ -73,8 +74,14 @@ export default {
         });
       },
     }))(),
+    replace({
+      preventAssignment: true,
+      'process.browser': true,
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
+    commonjs(),
     copy({
-      targets: [{ src: 'src/theme/assets/**/*', dest: 'dist/theme/assets' }],
+      targets: [{ src: 'src/theme/assets/*.css', dest: 'dist/theme/' }],
     }),
   ],
 } as RollupOptions;

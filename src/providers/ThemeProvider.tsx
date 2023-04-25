@@ -1,18 +1,23 @@
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useEffect, useMemo } from 'react';
+import ThemeContext from '~/contexts/ThemeContext';
 
-import ThemeContext from '../contexts/ThemeContext';
-import useTheme from '../hooks/useTheme';
-import { ITheme } from '../theme';
+import defaultTheme, { ITheme } from '../theme';
 
 export interface IThemeProviderProps {
   children?: ReactNode;
-  theme: Partial<ITheme>;
+  theme?: Partial<ITheme>;
 }
 
-const ThemeProvider: FC<IThemeProviderProps> = ({ children, theme: localTheme }) => {
-  const outerTheme = useTheme();
-  // TODO: deep merge
-  const theme = useMemo(() => ({ ...outerTheme, ...localTheme }), [localTheme, outerTheme]);
+const ThemeProvider: FC<IThemeProviderProps> = ({ children, theme: outerTheme = {} }) => {
+  const theme = useMemo(() => ({ ...defaultTheme, ...outerTheme }), [outerTheme]);
+
+  useEffect(() => {
+    Object.entries(theme).forEach(([property, variants]) => {
+      Object.entries(variants).forEach(([variant, value]) => {
+        if (typeof value !== 'function') document.documentElement.style.setProperty(`--${property}-${variant}`, value);
+      });
+    });
+  }, [theme]);
 
   return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;
 };

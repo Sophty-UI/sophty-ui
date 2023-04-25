@@ -1,0 +1,14 @@
+$spacing-1: 4px;
+$spacing-2: 8px;
+$spacing-3: 16px;
+$spacing-4: 24px;
+$spacing-5: 32px;
+
+:export {
+  xs: $spacing-2;
+  sm: $spacing-3;
+  md: $spacing-4;
+  lg: $spacing-5;
+  xl: $spacing-5;
+  sl: $spacing-5;
+}

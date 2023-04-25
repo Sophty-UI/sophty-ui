@@ -292,6 +292,7 @@
     "promise/prefer-await-to-then": "error",
     "quotes": ["warn", "single", { "avoidEscape": true }],
     "radix": "error",
+    "react/display-name": "off",
     "require-atomic-updates": "off",
     "require-await": "error",
     "rest-spread-spacing": ["error", "never"],
@@ -308,7 +309,7 @@
   },
   "overrides": [
     {
-      "files": ["*.test.ts", "*.mock.ts"],
+      "files": ["*.test.ts", "*.mock.ts", "story.tsx"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-magic-numbers": "off",

@@ -1,27 +1,35 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Resolution } from '~/types/resolution';
 
-import { Resolution } from '../types/resolution';
-import useMediaQuery from './useMediaQuery';
+import useTheme from './useTheme';
 
-function useResolution(): Resolution {
-  const isSuperLarge = useMediaQuery(({ breakpoints }) => breakpoints.up(Resolution.SuperLarge));
-  const isExtraLarge = useMediaQuery(({ breakpoints }) => breakpoints.up(Resolution.ExtraLarge));
-  const isLarge = useMediaQuery(({ breakpoints }) => breakpoints.up(Resolution.Large));
-  const isMedium = useMediaQuery(({ breakpoints }) => breakpoints.up(Resolution.Medium));
-  const isSmall = useMediaQuery(({ breakpoints }) => breakpoints.up(Resolution.Small));
-  const resolution: Resolution = useMemo(
-    () =>
-      [
-        isSuperLarge && Resolution.SuperLarge,
-        isExtraLarge && Resolution.ExtraLarge,
-        isLarge && Resolution.Large,
-        isMedium && Resolution.Medium,
-        isSmall && Resolution.Small,
-      ].find(value => !!value) || Resolution.ExtraSmall,
-    [isSuperLarge, isExtraLarge, isLarge, isMedium, isSmall]
-  );
+const RESOLUTIONS = Object.values(Resolution);
 
-  return resolution;
-}
+const useResolution = (): { breakpoint: Resolution; resolutions: Resolution[] } => {
+  const { breakpoint } = useTheme();
+  const medias = useMemo(() => RESOLUTIONS.map(item => window.matchMedia(breakpoint.up(item))), [breakpoint]);
+  const [matches, setMatches] = useState(medias.map(media => media.matches));
+
+  useEffect(() => {
+    const callbacks = medias.map((media, i) => {
+      const callback = (): void => setMatches(state => state.map((value, j) => (i === j ? media.matches : value)));
+
+      media.addEventListener('change', callback);
+
+      return () => media.removeEventListener('change', callback);
+    });
+
+    return () => callbacks.forEach(callback => callback());
+  }, [medias, setMatches]);
+
+  return useMemo(() => {
+    const index = matches.findIndex(Boolean);
+
+    return {
+      breakpoint: RESOLUTIONS[index] ?? Resolution.ExtraSmall,
+      resolutions: RESOLUTIONS.slice(index, RESOLUTIONS.length),
+    };
+  }, matches);
+};
 
 export default useResolution;

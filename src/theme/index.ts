@@ -1,17 +1,21 @@
-import breakpoints from '../theme/variables/_breakpoints.module.scss';
+import { Resolution } from '~/types/resolution';
+
+import breakpoints from './modules/breakpoints.module.scss';
+import spacings from './modules/spacings.module.scss';
 
 const BREAKPOINT_SUBTRACT = 0.02;
 
 const theme = {
-  breakpoints: {
+  spacing: { ...spacings },
+  breakpoint: {
     ...breakpoints,
-    up(breakpoint: keyof typeof breakpoints): string {
-      return `(min-width: ${breakpoints[breakpoint] ?? '0'})`;
+    up(breakpoint: Resolution): string {
+      return `(min-width: ${breakpoints[breakpoint] ?? ''})`;
     },
-    down(breakpoint: keyof typeof breakpoints): string {
-      return `(max-width: ${parseFloat(breakpoints[breakpoint] ?? '0') - BREAKPOINT_SUBTRACT}px)`;
+    down(breakpoint: Resolution): string {
+      return `(max-width: ${parseFloat(breakpoints[breakpoint] ?? '') - BREAKPOINT_SUBTRACT}px)`;
     },
-    between(a: keyof typeof breakpoints, b: keyof typeof breakpoints): string {
+    between(a: Resolution, b: Resolution): string {
       return `${this.up(a)} and ${this.down(b)}`;
     },
   },

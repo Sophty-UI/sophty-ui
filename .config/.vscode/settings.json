@@ -1,4 +1,5 @@
 {
-  "javascript.preferences.importModuleSpecifierEnding": "auto",
-  "typescript.preferences.importModuleSpecifierEnding": "auto"
+  "material-icon-theme.files.associations": {
+    "story.tsx": "storybook"
+  }
 }

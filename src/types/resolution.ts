@@ -1,17 +1,13 @@
+import { IDistance, ILength, IPercentage } from './style';
+
 export enum Resolution {
-  ExtraSmall = 'xs',
-  Small = 'sm',
-  Medium = 'md',
-  Large = 'lg',
-  ExtraLarge = 'xl',
   SuperLarge = 'sl',
+  ExtraLarge = 'xl',
+  Large = 'lg',
+  Medium = 'md',
+  Small = 'sm',
+  ExtraSmall = 'xs',
 }
 
-export const RESOLUTIONS = [
-  Resolution.ExtraSmall,
-  Resolution.Small,
-  Resolution.Medium,
-  Resolution.Large,
-  Resolution.ExtraLarge,
-  Resolution.ExtraLarge,
-] as const;
+export type IGap = number | IDistance<ILength | IPercentage>;
+export type ISpan = number | { [key in Resolution]?: number };
